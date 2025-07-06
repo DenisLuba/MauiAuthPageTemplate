@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MauiAuthPageTemplate.Dialogs.SignOutPopup" 
+             xmlns:strings="clr-namespace:MauiAuthPageTemplate.Resources.Strings.SignOutPopupResources">
+
+    <Grid>
+        <!-- 👇 Затемнённый фон с Tap -->
+        <BoxView>
+            <BoxView.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding CloseDialogCommand}" />
+            </BoxView.GestureRecognizers>
+        </BoxView>
+
+        <VerticalStackLayout VerticalOptions="Center">
+            <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="20">
+                <!-- Sign Out Label -->
+                <Label Text="{x:Static strings:ResourcesSignOutPopup.sure_sign_out}" />
+
+                <!-- Buttons -->
+                <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="20">
+                    <Button Text="{x:Static strings:ResourcesSignOutPopup.sign_out}" Command="{Binding SignOutCommand}" />
+                    <Button Text="{x:Static strings:ResourcesSignOutPopup.cancel}" Command="{Binding CloseDialogCommand}" />
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>

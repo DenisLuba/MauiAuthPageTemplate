@@ -1,0 +1,91 @@
+# ========== .NET BUILD ==========
+
+bin/
+obj/
+[Bb]uild/
+[Bb]uild[Ll]og.*
+*.dbmdl
+*.pdb
+*.user
+*.suo
+*.cache
+*.log
+*.vspscc
+*.vssscc
+*.vsp
+*.vsix
+*.nupkg
+*.psess
+*.pidb
+*.svclog
+*.sdf
+*.sqlite
+*.swp
+
+# ========== MAUI Specific ==========
+
+# Android
+**/Resources/Resource.designer.cs
+**/Resources/layout/*.designer.cs
+**/Resources/*.axml.cs
+**/google-services.json
+
+# iOS
+**/GoogleService-Info.plist
+
+# macCatalyst
+**/Entitlements.plist
+
+# Platform specific bin/obj
+**/Platforms/**/bin/
+**/Platforms/**/obj/
+
+# App Packages
+*.apk
+*.apks
+*.aab
+*.ipa
+*.xcarchive
+
+# ========== Visual Studio ==========
+
+.vs/
+.vscode/
+.idea/
+*.csproj.user
+*.sln.docstates
+
+# ========== Rider ==========
+
+.idea/
+*.sln.iml
+
+# ========== Others ==========
+
+*.DS_Store
+*.Thumbs.db
+*.orig
+*.rej
+
+# ========== Unit Tests / Coverage ==========
+
+TestResults/
+*.coverage
+*.coveragexml
+*.testlog
+*.trx
+*.log
+
+# ========== NuGet ==========
+
+*.nupkg
+packages/
+.nuget/
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# ========== JetBrains Rider ==========
+
+.idea/
+*.sln.iml

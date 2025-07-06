@@ -1,0 +1,76 @@
+﻿<?xml version = "1.0" encoding = "UTF-8" ?>
+<Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:MauiAuthPageTemplate"
+             x:Class="MauiAuthPageTemplate.App">
+    <Application.Resources>
+        <ResourceDictionary>
+            
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
+                <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!-- Shell -->
+            <Style TargetType="Shell">
+                <Setter Property="BackgroundColor" Value="#B7DBE1" />
+            </Style>
+
+            <Style TargetType="ContentPage">
+                <Setter Property="Shell.NavBarIsVisible" Value="False" />
+            </Style>
+
+            <!-- Label -->
+            <Style TargetType="Label">
+                <Setter Property="TextColor" Value="DarkSlateGray" />
+                <Setter Property="VerticalTextAlignment" Value="Center" />
+                <Setter Property="HorizontalTextAlignment" Value="Center" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="FontAttributes" Value="None" />
+                <Setter Property="FontSize" Value="{OnPlatform Android=Body, iOS=Body, WinUI=Medium, MacCatalyst=Medium}" />
+            </Style>
+
+            <!-- Entry -->
+            <Style TargetType="Entry">
+                <Setter Property="FontSize" Value="{OnPlatform Android=Body, iOS=Body, WinUI=Medium, MacCatalyst=Medium}" />
+                <Setter Property="TextColor" Value="DarkSlateGray" />
+                <Setter Property="PlaceholderColor" Value="SlateGray" />
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="HorizontalOptions" Value="Fill" />
+                <Setter Property="VerticalTextAlignment" Value="Center" />
+                <Setter Property="HorizontalTextAlignment" Value="Start" />
+                <Setter Property="InputTransparent" Value="False" />
+            </Style>
+
+            <!-- Button -->
+            <Style TargetType="Button">
+                <Setter Property="FontSize" Value="{OnPlatform Android=Body, iOS=Body, WinUI=Subtitle, MacCatalyst=Subtitle}" />
+                <Setter Property="CornerRadius" Value="30" />
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="BackgroundColor" Value="#357D3F" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="Padding" Value="25, 10, 25, 10" />
+                <Setter Property="InputTransparent" Value="False" />
+            </Style>
+
+            <!-- ActivityIndicator -->
+            <Style TargetType="ActivityIndicator">
+                <Setter Property="Color" Value="SlateGray" />
+                <Setter Property="HorizontalOptions" Value="Fill" />
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="WidthRequest" Value="70" />
+                <Setter Property="HeightRequest" Value="70" />
+            </Style>
+
+            <!-- BoxView -->
+            <Style TargetType="BoxView">
+                <Setter Property="BackgroundColor" Value="#80000000" />
+                <Setter Property="HorizontalOptions" Value="Fill" />
+                <Setter Property="VerticalOptions" Value="Fill" />
+            </Style>
+
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

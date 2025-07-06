@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"  
+               xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"  
+               xmlns:strings="clr-namespace:MauiAuthPageTemplate.Resources.Strings.SignUpPopupResources"  
+               xmlns:view_models="clr-namespace:MauiAuthPageTemplate.ViewModels"
+               x:DataType="view_models:SignUpPopupViewModel"
+               x:Class="MauiAuthPageTemplate.Dialogs.SignUpPopup">
+
+    <Grid>
+        <!-- 👇 Затемнённый фон с Tap -->
+        <BoxView>
+            <BoxView.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding ClosePageCommand}" />
+            </BoxView.GestureRecognizers>
+        </BoxView>
+
+        <!-- 👇 Центрированная форма -->
+        <VerticalStackLayout VerticalOptions="Center">
+            <Grid Padding="10" Margin="10" BackgroundColor="White" RowDefinitions="Auto, Auto, Auto, Auto, Auto" ColumnDefinitions="Auto, *" RowSpacing="10" ColumnSpacing="10" VerticalOptions="Center">
+
+                    <!-- 😎 Login -->
+                <Label Grid.Row="0" Grid.Column="0" HorizontalOptions="Start" Text="{x:Static strings:ResourcesSignUpPopup.login}" />
+                <Entry Grid.Row="0" Grid.Column="1" x:Name="entryLogin" Placeholder="{x:Static strings:ResourcesSignUpPopup.login}" Text="{Binding Username}"  ReturnType="Next" />
+
+                    <!-- 📧 Email -->
+                <Label Grid.Row="1" Grid.Column="0" HorizontalOptions="Start" Text="{x:Static strings:ResourcesSignUpPopup.email}" />
+                <Entry Grid.Row="1" Grid.Column="1" Placeholder="{x:Static strings:ResourcesSignUpPopup.email}" Text="{Binding Email}" Keyboard="Email" ReturnType="Next" />
+
+                    <!-- 🔑 Password -->
+                <Label Grid.Row="2" Grid.Column="0" HorizontalOptions="Start" Text="{x:Static strings:ResourcesSignUpPopup.password}" />
+                <Entry Grid.Row="2" Grid.Column="1" Placeholder="{x:Static strings:ResourcesSignUpPopup.password}" Text="{Binding Password}" IsPassword="True" ReturnType="Next" />
+
+                    <!-- 🔑 Confirm Password -->
+                <Label Grid.Row="3" Grid.Column="0" HorizontalOptions="Start" Text="{x:Static strings:ResourcesSignUpPopup.confirm_password}" />
+                <Entry Grid.Row="3" Grid.Column="1" Placeholder="{x:Static strings:ResourcesSignUpPopup.confirm_password}" Text="{Binding ConfirmPassword}" IsPassword="True" ReturnCommand="{Binding SignUpCommand}" />
+
+                <!-- Buttons -->
+                <Grid Grid.Row="4" Grid.ColumnSpan="2" ColumnDefinitions="*, *" >
+                    <!-- ⏮️ Cancel Button -->
+                    <Button Text="{x:Static strings:ResourcesSignUpPopup.cancel}" Command="{Binding ClosePageCommand}" />
+                    <!-- 🔲 Sign Up Button -->
+                    <Button Grid.Row="4" Grid.Column="1" Text="{x:Static strings:ResourcesSignUpPopup.sign_up}" Command="{Binding SignUpCommand}" />
+                </Grid>
+
+            </Grid>
+        </VerticalStackLayout>
+
+        <!-- 👇 Индикатор загрузки -->
+        <ActivityIndicator
+            IsRunning="{Binding Source={x:Static Application.Current}, Path=IsBusy}"
+            IsVisible="{Binding Source={x:Static Application.Current}, Path=IsBusy}" />
+
+    </Grid>
+
+</ContentPage>
+               

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"  
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"  
+             xmlns:strings="clr-namespace:MauiAuthPageTemplate.Resources.Strings.AuthPageResources"  
+             xmlns:view_models="clr-namespace:MauiAuthPageTemplate.ViewModels"
+             x:Class="MauiAuthPageTemplate.Pages.AuthPage"  
+             Shell.NavBarIsVisible="False"  
+             Shell.FlyoutBehavior="Disabled"
+             x:DataType="view_models:AuthPageViewModel">
+
+    <Grid>
+        <!-- Background Image -->
+        <Image Source="plasticine_man.png"  
+               Aspect="AspectFill"  
+               HorizontalOptions="Center"  
+               VerticalOptions="Center" />
+
+        <ScrollView>
+            <VerticalStackLayout Spacing="30" Margin="20, 50, 20, 20" HorizontalOptions="Fill">
+
+                <!-- WELCOME -->
+                <Label Text="{x:Static strings:ResourcesAuthPage.welcome}" FontSize="{OnPlatform Android=Title, iOS=Title, WinUI=Header, MacCatalyst=Header }" FontAttributes="Bold">
+                    <Label.Shadow>
+                        <Shadow Brush="SaddleBrown" Offset="2,0" Radius="4" Opacity="0.8" />
+                    </Label.Shadow>
+                </Label>
+
+                <!-- Login form -->
+                    <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto" ColumnDefinitions="Auto, 20, *" RowSpacing="15">
+
+                        <!-- Sign in to Continue -->
+                        <Label 
+                            Grid.ColumnSpan="3" 
+                            Text="{x:Static strings:ResourcesAuthPage.sign_in_to_continue}" 
+                            FontSize="{OnPlatform Android=Title, iOS=Subtitle, WinUI=Title, MacCatalyst=Title}" />
+
+                        <!-- Login or Email -->
+                        <Image 
+                            Grid.Row="1" 
+                            Grid.Column="0" 
+                            HorizontalOptions="Start" 
+                            Source="login_logo.png" 
+                            HeightRequest="30" 
+                            BackgroundColor="Transparent" />
+                        <Entry 
+                            Grid.Row="1" 
+                            Grid.Column="2" 
+                            x:Name="entryLogin" 
+                            Placeholder="{x:Static strings:ResourcesAuthPage.login}" 
+                            Text="{Binding Login}"  ReturnType="Next" />
+
+                        <!-- Password -->
+                        <Image 
+                            Grid.Row="2" 
+                            Grid.Column="0" 
+                            HorizontalOptions="Start" 
+                            Source="password_logo.png" 
+                            HeightRequest="30" />
+                        <Entry 
+                            Grid.Row="2" 
+                            Grid.Column="2" 
+                            x:Name="entryPassword" 
+                            Placeholder="{x:Static strings:ResourcesAuthPage.password}" 
+                            Text="{Binding Password}" 
+                            IsPassword="True" 
+                            ReturnCommand="{Binding SignInCommand}" />
+
+                        <!-- Forgot Password Link -->
+                        <Label 
+                            Grid.Row="3" 
+                            Grid.Column="2" 
+                            HorizontalOptions="End" 
+                            TextColor="SlateGray" 
+                            FontAttributes="Italic" 
+                            Text="{x:Static strings:ResourcesAuthPage.forgot_password}">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding ResetPasswordCommand}" />
+                            </Label.GestureRecognizers>
+                        </Label>
+
+                        <!-- Sign in Button -->
+                    <Button Grid.Row="4" Grid.ColumnSpan="3" Margin="0, 20, 0, 0" HeightRequest="50" HorizontalOptions="Fill" FontSize="Subtitle"  Text="{x:Static strings:ResourcesAuthPage.sign_in}" Command="{Binding SignInCommand}" />
+
+                        <!-- Sign up Link -->
+                        <StackLayout 
+                            VerticalOptions="Center" 
+                            HorizontalOptions="Center" 
+                            Grid.Row="5" 
+                            Grid.ColumnSpan="3"
+                            HeightRequest="{OnPlatform Android=100, WinUI=50, iOS=100, MacCatalyst=50}" 
+                            Spacing="10"
+                            Orientation="{OnPlatform Android=Vertical, WinUI=Horizontal, iOS=Vertical, MacCatalyst=Horizontal}">
+
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding SignUpCommand}" />
+                            </StackLayout.GestureRecognizers>
+
+                            <Label 
+                                HorizontalOptions="Center" 
+                                TextColor="SlateGray" 
+                                FontAttributes="Italic" 
+                                Text="{x:Static strings:ResourcesAuthPage.new_user}" />
+
+                            <Label 
+                                HorizontalOptions="Center" 
+                                Text="{x:Static strings:ResourcesAuthPage.sign_up}" />
+                        </StackLayout>
+                    </Grid>
+
+                <!-- OR LINE -->
+                <Grid 
+                    ColumnDefinitions="*, 50, *" 
+                    HorizontalOptions="Fill" 
+                    VerticalOptions="Center"
+                    IsVisible="{OnPlatform Android=True, iOS=True, WinUI=False, MacCatalyst=False}">
+
+                    <BoxView
+                        HorizontalOptions="Fill"
+                        VerticalOptions="Center"
+                        BackgroundColor="SlateGray"
+                        HeightRequest="2" />
+
+                    <Label
+                        Grid.Column="1"
+                        Margin="10"
+                        Text="{x:Static strings:ResourcesAuthPage.or}"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"
+                        HorizontalTextAlignment="Center"
+                        VerticalTextAlignment="Center"
+                        TextColor="SlateGray" />
+
+                    <BoxView
+                        Grid.Column="2"
+                        HorizontalOptions="Fill"
+                        VerticalOptions="Center"
+                        BackgroundColor="SlateGray"
+                        HeightRequest="2" />
+
+                </Grid>
+
+                <!-- Alternative authentication methods -->
+                <Grid 
+                    HorizontalOptions="Fill" 
+                    VerticalOptions="Center" 
+                    ColumnDefinitions="*, *, *"
+                    IsVisible="{OnPlatform Android=True, iOS=True, WinUI=False, MacCatalyst=False}">
+
+                    <!-- Login With The Phone Button -->
+                    <Button
+                        ImageSource="phone_logo.png"
+                        Grid.Column="0"
+                        IsVisible="{OnPlatform Android=True, WinUI=False, iOS=True, MacCatalyst=False}"
+                        HeightRequest="44"
+                        WidthRequest="44"
+                        CornerRadius="22"
+                        Padding="4"
+                        BorderColor="White"
+                        BorderWidth="1"
+                        BackgroundColor="Transparent"
+                        Command="{Binding LoginWithPhoneCommand}"/>
+
+                    <!-- Login With Google Button -->
+                    <Button
+                        ImageSource="google_logo.png"
+                        Grid.Column="1"
+                        IsVisible="{OnPlatform Android=True, WinUI=False, iOS=True, MacCatalyst=False}"
+                        HeightRequest="44"
+                        WidthRequest="44"
+                        CornerRadius="22"
+                        Padding="4"
+                        BorderColor="White"
+                        BorderWidth="1"
+                        BackgroundColor="Transparent"
+                        Command="{Binding LoginWithGoogleCommand}"/>
+
+                    <!-- Login With Facebook Button -->
+                    <Button
+                        ImageSource="facebook_logo.png"
+                        Grid.Column="2"
+                        IsVisible="{OnPlatform Android=True, WinUI=False, iOS=True, MacCatalyst=False}"
+                        HeightRequest="44"
+                        WidthRequest="44"
+                        CornerRadius="22"
+                        Padding="4"
+                        BorderColor="White"
+                        BorderWidth="1"
+                        BackgroundColor="Transparent"
+                        Command="{Binding LoginWithFacebookCommand}"/>
+                </Grid>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <ActivityIndicator
+            IsRunning="{Binding Source={x:Static Application.Current}, Path=IsBusy}"
+            IsVisible="{Binding Source={x:Static Application.Current}, Path=IsBusy}" />
+    </Grid>
+</ContentPage>
