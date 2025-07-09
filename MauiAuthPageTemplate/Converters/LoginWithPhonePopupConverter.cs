@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Diagnostics;
+using System.Globalization;
 using System.Windows.Input;
 using MauiAuthPageTemplate.Resources.Strings.LoginWithPhonePopupResources;
 
@@ -18,8 +19,22 @@ public class LoginWithPhonePopupConverter : IMultiValueConverter
         if (element == "buttoncommand" && values.Length < 5)
             throw new ArgumentException("Expected at least 5 values for button commands.", nameof(values));
 
-        if (element == "buttoncommand" && (values[3] is not ICommand || values[4] is not ICommand))
-            throw new ArgumentException($"An ICommand was expected for the requested values 3 and 4, but an {values[3].GetType()} was received");
+        //if (element == "buttoncommand" && (values[3] is not ICommand || values[4] is not ICommand))
+        //    throw new ArgumentException($"An ICommand was expected for the requested values 3 and 4, but an {values[3].GetType()} was received");
+
+        if (element == "buttoncommand")
+        {
+            var requestCmd = values.ElementAtOrDefault(3) as ICommand;
+            var loginCmd = values.ElementAtOrDefault(4) as ICommand;
+
+            Trace.WriteLine($"IsVerificationCodeDialog = {IsVerificationCodeDialog}");
+            Trace.WriteLine($"RequestCmd = {requestCmd?.GetType().Name}");
+            Trace.WriteLine($"LoginCmd = {loginCmd?.GetType().Name}");
+
+            return IsVerificationCodeDialog
+                ? loginCmd ?? Binding.DoNothing
+                : requestCmd ?? Binding.DoNothing;
+        }
 
         return element switch
         {
@@ -43,18 +58,32 @@ public class LoginWithPhonePopupConverter : IMultiValueConverter
             ? ResourcesLoginWithPhonePopup.log_in
             : ResourcesLoginWithPhonePopup.send_verification_code,
 
-            "buttoncommand" => IsVerificationCodeDialog
-            ? values[4] as ICommand // LoginWithVerificationCodeCommand
-                ?? throw new ArgumentException("Expected RelayCommand for phone number entry", nameof(values))
-            : values[3] as ICommand // RequestVerificationCodeCommand
-                ?? throw new ArgumentException("Expected RelayCommand for phone number entry", nameof(values)),
-
             _ => throw new ArgumentException("Invalid parameter value", nameof(parameter))
         };
     }
 
     public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
     {
-        throw new NotImplementedException();
+        var element = (parameter as string)?.ToLower() ?? string.Empty;
+
+        // ConvertBack нужен только для Entry.Text, у которой есть двухсторонняя привязка
+        if (element != "entrytext")
+            throw new NotImplementedException("ConvertBack is only implemented for entrytext");
+
+        if (value is not string phoneNumberOrCode)
+            throw new ArgumentException("Expected string value from Entry.Text", nameof(value));
+
+        // Возвращаем нужное значение в нужный индекс [IsVerificationCodeDialog, PhoneNumber, Code] для MultiBinding. 
+        // Вот сюда:
+        // <MultiBinding Converter="{StaticResource LoginWithPhonePopupConverter}" ConverterParameter="entrytext">
+        //    < Binding Path = "IsVerificationCodeDialog" />
+        //    < Binding Path = "PhoneNumber" />
+        //    < Binding Path = "Code" />
+        //</ MultiBinding >
+        return [
+            Binding.DoNothing, // IsVerificationCodeDialog не трогаем
+            phoneNumberOrCode, // PhoneNumber (если IsVerificationCodeDialog == false)
+            phoneNumberOrCode // Code (если IsVerificationCodeDialog == true)
+        ];
     }
 }

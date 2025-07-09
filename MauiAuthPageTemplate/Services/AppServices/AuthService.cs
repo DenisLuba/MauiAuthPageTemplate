@@ -18,27 +18,33 @@ public class AuthService(ILoginService loginService)
     /// <remarks>Этот метод связывается с внешней службой аутентификации для отправки проверочного кода. 
     /// Убедитесь, что указанный номер телефона действителен и правильно отформатирован.</remarks>
     /// <param name="phoneNumber">Номер телефона, на который будет отправлен проверочный код.</param>
-    /// <returns><see cref="PhoneAuthSessionResult"/> содержащий информацию о сеансе, необходимую для последующих шагов аутентификации.</returns>
+    /// <returns>Результат операции типа <see cref="Enum"/> <see cref="Result"/></returns>
     /// <exception cref="Exception">Выбрасывается, если запрос завершился неудачей или ответ не содержит необходимой информации о сессии.</exception>
-    public async Task<PhoneAuthSessionResult?> RequestVerificationCodeAsync(string phoneNumber)
+    public async Task<Result> RequestVerificationCodeAsync(string phoneNumber)
     {
         try
         {
-            PhoneAuthSessionResult? phoneAuthSessionResult = null;
-            await StartWaitingAsync(async () =>
-            {
-                phoneAuthSessionResult = await loginService.RequestVerificationCodeAsync(phoneNumber, GlobalValues.DefaultTimeout);
-                return true;
-            });
+            var isRequested = await StartWaitingAsync(async () =>  
+                await loginService.RequestVerificationCodeAsync(phoneNumber, GlobalValues.DefaultTimeout));
 
-            if (phoneAuthSessionResult is not null)
-                return phoneAuthSessionResult;
-            else throw new Exception("PhoneAuthSessionResult is null.");
+            if (isRequested) return Result.Success;
+
+            return Result.Failure;
+        }
+        catch (NoInternetException ex)
+        {
+            Trace.WriteLine(ex.Message);
+            return Result.NoInternetConnection;
+        }
+        catch (TimeoutException ex)
+        {
+            Trace.WriteLine(ex.Message);
+            return Result.NoInternetConnection;
         }
         catch (Exception ex)
         {
             Trace.WriteLine(ex.Message);
-            return null;
+            return Result.Failure;
         }
     }
     #endregion
@@ -47,16 +53,14 @@ public class AuthService(ILoginService loginService)
     /// <summary>
     /// Авторизация с помощью проверочного кода, полученного на номер телефона.
     /// </summary>
-    /// <param name="sessionInfo">Информация, полученная для номера телефона,
-    /// введенного в параметр метода RequestVerificationCodeAsync.</param>
     /// <param name="code">Код, полученный пользователем в СМС.</param>
     /// <returns>Результат операции типа <see cref="Enum"/> <see cref="Result"/></returns>
-    public async Task<Result> LoginWithVerificationCodeAsync(string sessionInfo, string code)
+    public async Task<Result> LoginWithVerificationCodeAsync(string code)
     {
         try
         {
             var isLogin = await StartWaitingAsync(async () =>
-                await loginService.LoginWithVerificationCodeAsync(sessionInfo, code, GlobalValues.DefaultTimeout));
+                await loginService.LoginWithVerificationCodeAsync(code, GlobalValues.DefaultTimeout));
 
             if (!isLogin)
                 throw new Exception("Login with the phone failed.");
@@ -64,6 +68,11 @@ public class AuthService(ILoginService loginService)
             return Result.Success;
         }
         catch (NoInternetException ex)
+        {
+            Trace.WriteLine(ex.Message);
+            return Result.NoInternetConnection;
+        }
+        catch (TimeoutException ex)
         {
             Trace.WriteLine(ex.Message);
             return Result.NoInternetConnection;

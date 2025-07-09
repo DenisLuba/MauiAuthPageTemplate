@@ -1,18 +1,16 @@
 ﻿using AuthenticationMaui.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System.Windows.Input;
 using MauiAuthPageTemplate.Resources.Strings.LoginWithPhonePopupViewModelResources;
 using MauiAuthPageTemplate.Services;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Windows.Input;
 
 namespace MauiAuthPageTemplate.ViewModels;
 
-public partial class LoginWithPhoneViewModel(AuthService authService): ObservableObject
+public partial class LoginWithPhoneViewModel(AuthService authService)  : ObservableObject, INotifyPropertyChanged
 {
-    #region Private Properties
-    private string? SessionInfo { get; set; }
-    #endregion
-
     #region Observable Properties
     [ObservableProperty]
     private bool _isVerificationCodeDialog;
@@ -37,19 +35,25 @@ public partial class LoginWithPhoneViewModel(AuthService authService): Observabl
         }
         try
         {
-            var sessionResult = await authService.RequestVerificationCodeAsync(PhoneNumber);
-            if (sessionResult != null)
+            var result = await authService.RequestVerificationCodeAsync(PhoneNumber);
+            if (result == Result.Success)
             {
                 IsVerificationCodeDialog = true; // Switch to code entry mode
-                SessionInfo = sessionResult.SessionInfo; // Store session info for later use
+                PhoneNumber = string.Empty; // Clean the entry field
+                Code = string.Empty; // Clean the entry field
             }
-            else
+            else if (result == Result.NoInternetConnection)
+            {
+                await Shell.Current.DisplayAlert(ResourcesLoginWithPhoneViewModel.error, ResourcesLoginWithPhoneViewModel.no_internet_connection, "OK");
+            }
+            else 
             {
                 await Shell.Current.DisplayAlert(ResourcesLoginWithPhoneViewModel.error, ResourcesLoginWithPhoneViewModel.failed_verification_code, "OK");
             }
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            Trace.WriteLine($"Error login with Phone: {ex.Message}");
             await Shell.Current.DisplayAlert(ResourcesLoginWithPhoneViewModel.error, ResourcesLoginWithPhoneViewModel.failed_verification_code, "OK");
         }
     }
@@ -64,28 +68,26 @@ public partial class LoginWithPhoneViewModel(AuthService authService): Observabl
             await Shell.Current.DisplayAlert(ResourcesLoginWithPhoneViewModel.error, ResourcesLoginWithPhoneViewModel.code_is_empty, "OK");
             return;
         }
-        if (string.IsNullOrWhiteSpace(SessionInfo))
-        {
-            await Shell.Current.DisplayAlert(ResourcesLoginWithPhoneViewModel.error, ResourcesLoginWithPhoneViewModel.failed_verification_code, "OK");
-            return;
-        }
+
         try
         {
-            var isAuthorized = await authService.LoginWithVerificationCodeAsync(SessionInfo, Code);
-            if (isAuthorized is Result.Success)
+            var result = await authService.LoginWithVerificationCodeAsync(Code);
+            if (result is Result.Success)
             {
-                IsVerificationCodeDialog = false; // Close the dialog
+                IsVerificationCodeDialog = false; 
+                PhoneNumber = string.Empty;
+                Code = string.Empty;
                 await Shell.Current.GoToAsync(GlobalValues.MainPage);
                 CloseDialogEvent?.Invoke(this, true); // Notify that the dialog should close
             }
-            else if (isAuthorized is Result.Failure)
-            {
-                await Shell.Current.DisplayAlert(ResourcesLoginWithPhoneViewModel.error, ResourcesLoginWithPhoneViewModel.error_verification_code, "OK");
-                IsVerificationCodeDialog = false; // We return to the phone number input dialog.
-            }
-            else if (isAuthorized is Result.NoInternetConnection)
+            else if (result is Result.NoInternetConnection)
             {
                 await Shell.Current.DisplayAlert(ResourcesLoginWithPhoneViewModel.error, ResourcesLoginWithPhoneViewModel.no_internet_connection, "OK");
+                IsVerificationCodeDialog = false; // We return to the phone number input dialog.
+            }
+            else
+            {
+                await Shell.Current.DisplayAlert(ResourcesLoginWithPhoneViewModel.error, ResourcesLoginWithPhoneViewModel.error_verification_code, "OK");
                 IsVerificationCodeDialog = false; // We return to the phone number input dialog.
             }
         }
@@ -110,6 +112,7 @@ public partial class LoginWithPhoneViewModel(AuthService authService): Observabl
     [RelayCommand]
     public void CloseDialog()
     {
+        IsVerificationCodeDialog = false;
         CloseDialogEvent?.Invoke(this, false);
     }
     #endregion
