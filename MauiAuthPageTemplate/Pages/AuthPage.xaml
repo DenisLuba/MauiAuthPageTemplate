@@ -21,7 +21,7 @@
                 <!-- WELCOME -->
                 <Label Text="{x:Static strings:ResourcesAuthPage.welcome}" FontSize="{OnPlatform Android=Title, iOS=Title, WinUI=Header, MacCatalyst=Header }" FontAttributes="Bold">
                     <Label.Shadow>
-                        <Shadow Brush="SaddleBrown" Offset="2,0" Radius="4" Opacity="0.8" />
+                        <Shadow Brush="Black" Offset="2,0" Radius="4" Opacity="0.8" />
                     </Label.Shadow>
                 </Label>
 
@@ -109,7 +109,7 @@
 
                 <!-- OR LINE -->
                 <Grid 
-                    ColumnDefinitions="*, 50, *" 
+                    ColumnDefinitions="*, 80, *" 
                     HorizontalOptions="Fill" 
                     VerticalOptions="Center"
                     IsVisible="{OnPlatform Android=True, iOS=True, WinUI=False, MacCatalyst=False}">
@@ -124,6 +124,7 @@
                         Grid.Column="1"
                         Margin="10"
                         Text="{x:Static strings:ResourcesAuthPage.or}"
+                        FontSize="{OnPlatform Android=Subtitle, iOS=Subtitle, WinUI=Body, MacCatalyst=Body}"
                         HorizontalOptions="Center"
                         VerticalOptions="Center"
                         HorizontalTextAlignment="Center"
@@ -144,13 +145,13 @@
                     HorizontalOptions="Fill" 
                     VerticalOptions="Center" 
                     ColumnDefinitions="*, *, *"
-                    IsVisible="{OnPlatform Android=True, iOS=True, WinUI=False, MacCatalyst=False}">
+                    IsVisible="{OnPlatform Android=True, iOS=True, WinUI=True, MacCatalyst=False}">
 
                     <!-- Login With The Phone Button -->
                     <Button
                         ImageSource="phone_logo.png"
                         Grid.Column="0"
-                        IsVisible="{OnPlatform Android=True, WinUI=False, iOS=True, MacCatalyst=False}"
+                        IsVisible="{OnPlatform Android=True, WinUI=True, iOS=True, MacCatalyst=False}"
                         HeightRequest="44"
                         WidthRequest="44"
                         CornerRadius="22"

@@ -7,9 +7,10 @@ namespace MauiAuthPageTemplate
 {
     public partial class App : Application, INotifyPropertyChanged
     {
-        private AuthService _authService;
-        private SignOutPopupViewModel _signOutPopupViewModel;
-        private INavigationService _navigation;
+        private readonly AuthService _authService;
+        private readonly SignOutPopupViewModel _signOutPopupViewModel;
+        private readonly INavigationService _navigation;
+        private readonly LocalAuthPreferencesService _preferencesService;
 
         private bool isBusy;
         public bool IsBusy
@@ -25,17 +26,18 @@ namespace MauiAuthPageTemplate
             }
         }
 
-        public App(AuthService authService, SignOutPopupViewModel signOutPopupViewModel, INavigationService navigation)
+        public App(AuthService authService, SignOutPopupViewModel signOutPopupViewModel, INavigationService navigation, LocalAuthPreferencesService preferencesService)
         {
             InitializeComponent();
             _authService = authService;
             _signOutPopupViewModel = signOutPopupViewModel;
             _navigation = navigation;
+            _preferencesService = preferencesService;
         }
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
-            return new Window(new AppShell(_authService, _signOutPopupViewModel, _navigation));
+            return new Window(new AppShell(_authService, _signOutPopupViewModel, _navigation, _preferencesService));
         }
     }
 }

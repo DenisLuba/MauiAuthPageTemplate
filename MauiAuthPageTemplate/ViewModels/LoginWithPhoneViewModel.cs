@@ -1,6 +1,8 @@
 ﻿using AuthenticationMaui.Services;
+using CommunityToolkit.Maui.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using MauiAuthPageTemplate.Pages;
 using MauiAuthPageTemplate.Resources.Strings.LoginWithPhonePopupViewModelResources;
 using MauiAuthPageTemplate.Services;
 using System.ComponentModel;
@@ -21,7 +23,7 @@ public partial class LoginWithPhoneViewModel(AuthService authService)  : Observa
     #endregion
 
     #region Events
-    public EventHandler<bool>? CloseDialogEvent { get; set; } 
+    public EventHandler<bool>? CloseDialogEvent { get; set; }
     #endregion
 
     #region RequestVerificationCodeCommand 
@@ -35,7 +37,7 @@ public partial class LoginWithPhoneViewModel(AuthService authService)  : Observa
         }
         try
         {
-            var result = await authService.RequestVerificationCodeAsync(PhoneNumber);
+            var result = await authService.RequestVerificationCodeAsync(PhoneNumber, GlobalValues.IS_TEST);
             if (result == Result.Success)
             {
                 IsVerificationCodeDialog = true; // Switch to code entry mode

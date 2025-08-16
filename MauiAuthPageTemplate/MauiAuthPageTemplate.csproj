@@ -101,6 +101,11 @@
 	    <AutoGen>True</AutoGen>
 	    <DependentUpon>ResourcesLoginWithPhoneViewModel.resx</DependentUpon>
 	  </Compile>
+	  <Compile Update="Resources\Strings\RecaptchaWebViewResources\ResourcesRecaptchaWebView.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>ResourcesRecaptchaWebView.resx</DependentUpon>
+	  </Compile>
 	  <Compile Update="Resources\Strings\ResetPasswordPopupResources\ResourcesResetPasswordPopup.Designer.cs">
 	    <DesignTime>True</DesignTime>
 	    <AutoGen>True</AutoGen>
@@ -158,6 +163,10 @@
 	    <Generator>PublicResXFileCodeGenerator</Generator>
 	    <LastGenOutput>ResourcesLoginWithPhoneViewModel.Designer.cs</LastGenOutput>
 	  </EmbeddedResource>
+	  <EmbeddedResource Update="Resources\Strings\RecaptchaWebViewResources\ResourcesRecaptchaWebView.resx">
+	    <Generator>PublicResXFileCodeGenerator</Generator>
+	    <LastGenOutput>ResourcesRecaptchaWebView.Designer.cs</LastGenOutput>
+	  </EmbeddedResource>
 	  <EmbeddedResource Update="Resources\Strings\ResetPasswordPopupResources\ResourcesResetPasswordPopup.resx">
 	    <Generator>PublicResXFileCodeGenerator</Generator>
 	    <LastGenOutput>ResourcesResetPasswordPopup.Designer.cs</LastGenOutput>
@@ -188,7 +197,16 @@
 	  <MauiXaml Update="Dialogs\LoginWithPhonePopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Dialogs\PatternPopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Dialogs\PinCodePopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Dialogs\ResetPasswordPopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Dialogs\SelectEnterMethodPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Dialogs\SignOutPopup.xaml">

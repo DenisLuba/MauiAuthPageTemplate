@@ -1,7 +1,7 @@
 ﻿using AuthenticationMaui.Services;
+using MauiAuthPageTemplate.Exceptions;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
-using MauiAuthPageTemplate.Exceptions;
 
 namespace MauiAuthPageTemplate.Services;
 
@@ -18,14 +18,14 @@ public class AuthService(ILoginService loginService)
     /// <remarks>Этот метод связывается с внешней службой аутентификации для отправки проверочного кода. 
     /// Убедитесь, что указанный номер телефона действителен и правильно отформатирован.</remarks>
     /// <param name="phoneNumber">Номер телефона, на который будет отправлен проверочный код.</param>
+    /// <param name="isTest">Параметр указывает, будет ли выполняться метод в тестовом режиме или на реальном устройстве.</param>
     /// <returns>Результат операции типа <see cref="Enum"/> <see cref="Result"/></returns>
-    /// <exception cref="Exception">Выбрасывается, если запрос завершился неудачей или ответ не содержит необходимой информации о сессии.</exception>
-    public async Task<Result> RequestVerificationCodeAsync(string phoneNumber)
+    public async Task<Result> RequestVerificationCodeAsync(string phoneNumber, bool isTest)
     {
         try
         {
             var isRequested = await StartWaitingAsync(async () =>  
-                await loginService.RequestVerificationCodeAsync(phoneNumber, GlobalValues.DefaultTimeout));
+                await loginService.RequestVerificationCodeAsync(phoneNumber, GlobalValues.DefaultTimeout, isTest, Shell.Current));
 
             if (isRequested) return Result.Success;
 
@@ -263,7 +263,7 @@ public class AuthService(ILoginService loginService)
     /// Сброс пароля пользователя по электронной почте.
     /// </summary>
     /// <param name="email">Электронная почта пользователя, на которую придет новый пароль.</param>
-    /// <returns>true, если сброс пароля прошел успешно, иначе - false.</returns>
+    /// <returns>Результат операции типа <see cref="Enum"/> <see cref="Result"/></returns>
     public async Task<Result> SendPasswordResetEmailAsync(string email)
     {
         try
@@ -392,8 +392,8 @@ public class AuthService(ILoginService loginService)
     /// После окончания операции возвращает переменной App.IsBusy значение false.
     /// </summary>
     /// <param name="asyncMethod">Асинхронная операция, которая возвращает результат типа bool.</param>
-    /// <returns>Возвращает результат операции типа bool.</returns>
-    private static async Task<bool> StartWaitingAsync(Func<Task<bool>> asyncMethod)
+    /// <returns>Возвращает результат операции.</returns>
+    private static async Task<T> StartWaitingAsync<T>(Func<Task<T>> asyncMethod)
     {
         if (Connectivity.Current.NetworkAccess != NetworkAccess.Internet)
             throw new NoInternetException();
