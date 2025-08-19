@@ -67,6 +67,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<ResetPasswordPopupViewModel>();
         builder.Services.AddSingleton<LoginWithPhoneViewModel>();
         builder.Services.AddSingleton<SignOutPopupViewModel>();
+        builder.Services.AddSingleton<SelectEnterMethodPopupViewModel>();
 
         return builder;
     }

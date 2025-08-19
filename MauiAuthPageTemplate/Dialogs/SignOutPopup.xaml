@@ -12,8 +12,14 @@
             </BoxView.GestureRecognizers>
         </BoxView>
 
-        <VerticalStackLayout VerticalOptions="Center">
-            <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="20">
+        <Grid HorizontalOptions="Center" VerticalOptions="Center" BackgroundColor="White" Margin="20">
+            <BoxView>
+                <BoxView.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding DummyCommand}" />
+                </BoxView.GestureRecognizers>
+            </BoxView>
+            
+            <VerticalStackLayout Padding="20" HorizontalOptions="Center" VerticalOptions="Center" Spacing="20" BackgroundColor="White">
                 <!-- Sign Out Label -->
                 <Label Text="{x:Static strings:ResourcesSignOutPopup.sure_sign_out}" />
 
@@ -23,6 +29,6 @@
                     <Button Text="{x:Static strings:ResourcesSignOutPopup.cancel}" Command="{Binding CloseDialogCommand}" />
                 </HorizontalStackLayout>
             </VerticalStackLayout>
-        </VerticalStackLayout>
+        </Grid>
     </Grid>
 </ContentPage>

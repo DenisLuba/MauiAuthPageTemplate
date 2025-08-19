@@ -5,7 +5,7 @@ using MauiAuthPageTemplate.Services;
 
 namespace MauiAuthPageTemplate.ViewModels;
 
-public partial class SignOutPopupViewModel(AuthService authService) : ObservableObject
+public partial class SignOutPopupViewModel(AuthService authService, LocalAuthPreferencesService preferencesService) : ObservableObject
 {
     #region Events
     public EventHandler? CloseDialogEvent; 
@@ -18,6 +18,8 @@ public partial class SignOutPopupViewModel(AuthService authService) : Observable
         try
         {
             var result = await authService.LogoutAsync();
+            preferencesService.ClearAuthMethod();
+
             if (result.Equals(Result.NoInternetConnection))
                 await Shell.Current.DisplayAlert(ResourcesSignOutPopupViewModel.error, ResourcesSignOutPopupViewModel.no_internet_connection, "OK");
             else if (result.Equals(Result.Failure) || result.Equals(Result.UnknownError))
@@ -36,6 +38,11 @@ public partial class SignOutPopupViewModel(AuthService authService) : Observable
     public void CloseDialog()
     {
         CloseDialogEvent?.Invoke(this, EventArgs.Empty);
-    } 
+    }
+    #endregion
+
+    #region DummyCommand
+    [RelayCommand]
+    public void Dummy() { } 
     #endregion
 }

@@ -118,4 +118,9 @@ public partial class LoginWithPhoneViewModel(AuthService authService)  : Observa
         CloseDialogEvent?.Invoke(this, false);
     }
     #endregion
+
+    #region DummyCommand
+    [RelayCommand]
+    public void Dummy() { }
+    #endregion
 }

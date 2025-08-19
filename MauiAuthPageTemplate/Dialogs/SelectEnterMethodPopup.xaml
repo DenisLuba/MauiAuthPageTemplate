@@ -1,12 +1,68 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:strings="clr-namespace:MauiAuthPageTemplate.Resources.Strings.SelectEnterMethodPopupResources"
              x:Class="MauiAuthPageTemplate.Dialogs.SelectEnterMethodPopup"
              Title="SelectEnterMethodPopup">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+
+    <Grid>
+        <!-- 👇 Затемнённый фон с Tap -->
+        <BoxView>
+            <BoxView.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding ApplyCommand}" />
+            </BoxView.GestureRecognizers>
+        </BoxView>
+
+
+        <Grid HorizontalOptions="Center" VerticalOptions="Center" BackgroundColor="White" Margin="20">
+            <BoxView>
+                <BoxView.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding DummyCommand}" />
+                </BoxView.GestureRecognizers>
+            </BoxView>
+            
+            <VerticalStackLayout Padding="20" VerticalOptions="Center" BackgroundColor="White">
+                <!-- Заголовок -->
+                <Label Text="{x:Static strings:ResourcesSelectEnterMethodPopup.select_login_method}" FontSize="Title" HorizontalOptions="Center" />
+
+                <!-- Основной метод -->
+                <VerticalStackLayout Padding="0, 50, 0, 20">
+                    <Label Text="{x:Static strings:ResourcesSelectEnterMethodPopup.select_main_login_method}" FontSize="Subtitle" HorizontalOptions="Start" IsVisible="{OnPlatform Android=True, iOS=True, WinUI=False, MacCatalyst=False}" />
+
+                    <RadioButton Content="{x:Static strings:ResourcesSelectEnterMethodPopup.pin_code}"
+              GroupName="MainMethod"
+              IsChecked="{Binding IsPinSelected}" />
+                    <RadioButton Content="{x:Static strings:ResourcesSelectEnterMethodPopup.pattern}"
+              GroupName="MainMethod"
+              IsChecked="{Binding IsPatternSelected}" />
+                </VerticalStackLayout>
+
+                <!-- Дополнительные методы -->
+                <VerticalStackLayout Margin="0, 20, 0, 50" HorizontalOptions="Fill">
+                    <Label Text="{x:Static strings:ResourcesSelectEnterMethodPopup.select_additional_login_method}" FontSize="Subtitle" HorizontalOptions="Start" IsVisible="{OnPlatform Android=True, iOS=True, WinUI=False, MacCatalyst=False}" />
+
+                    <Grid IsVisible="{OnPlatform Android=True, iOS=True, WinUI=False, MacCatalyst=False}" HorizontalOptions="Fill" ColumnDefinitions="Auto, *">
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ToggleFaceIdCommand}" />
+                        </Grid.GestureRecognizers>
+
+                        <CheckBox IsChecked="{Binding Path=IsFaceIdSelected, Mode=TwoWay}" />
+                        <Label Grid.Column="1" Text="{x:Static strings:ResourcesSelectEnterMethodPopup.face_id}" HorizontalOptions="Start" />
+                    </Grid>
+
+                    <Grid IsVisible="{OnPlatform Android=True, iOS=True, WinUI=False, MacCatalyst=False}" HorizontalOptions="Fill" ColumnDefinitions="Auto, *">
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ToggleFingerprintCommand}" />
+                        </Grid.GestureRecognizers>
+
+                        <CheckBox IsChecked="{Binding IsFingerprintSelected}" />
+                        <Label Grid.Column="1" Text="{x:Static strings:ResourcesSelectEnterMethodPopup.fingerprint}" HorizontalOptions="Start" />
+                    </Grid>
+                </VerticalStackLayout>
+
+                <Button Text="{x:Static strings:ResourcesSelectEnterMethodPopup.apply}" Command="{Binding ApplyCommand}"/>
+
+            </VerticalStackLayout>
+        </Grid>
+    </Grid>
 </ContentPage>

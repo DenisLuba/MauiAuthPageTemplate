@@ -116,6 +116,11 @@
 	    <AutoGen>True</AutoGen>
 	    <DependentUpon>ResourcesResetPasswordPopupViewModel.resx</DependentUpon>
 	  </Compile>
+	  <Compile Update="Resources\Strings\SelectEnterMethodPopupResources\ResourcesSelectEnterMethodPopup.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>ResourcesSelectEnterMethodPopup.resx</DependentUpon>
+	  </Compile>
 	  <Compile Update="Resources\Strings\SignOutPopupResources\ResourcesSignOutPopup.Designer.cs">
 	    <DesignTime>True</DesignTime>
 	    <AutoGen>True</AutoGen>
@@ -172,8 +177,12 @@
 	    <LastGenOutput>ResourcesResetPasswordPopup.Designer.cs</LastGenOutput>
 	  </EmbeddedResource>
 	  <EmbeddedResource Update="Resources\Strings\ResetPasswordPopupViewModelResources\ResourcesResetPasswordPopupViewModel.resx">
-	    <Generator>ResXFileCodeGenerator</Generator>
+	    <Generator>PublicResXFileCodeGenerator</Generator>
 	    <LastGenOutput>ResourcesResetPasswordPopupViewModel.Designer.cs</LastGenOutput>
+	  </EmbeddedResource>
+	  <EmbeddedResource Update="Resources\Strings\SelectEnterMethodPopupResources\ResourcesSelectEnterMethodPopup.resx">
+	    <Generator>PublicResXFileCodeGenerator</Generator>
+	    <LastGenOutput>ResourcesSelectEnterMethodPopup.Designer.cs</LastGenOutput>
 	  </EmbeddedResource>
 	  <EmbeddedResource Update="Resources\Strings\SignOutPopupResources\ResourcesSignOutPopup.resx">
 	    <Generator>PublicResXFileCodeGenerator</Generator>
@@ -194,13 +203,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Dialogs\LocalAuthDialog.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Dialogs\LoginWithPhonePopup.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Dialogs\PatternPopup.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Dialogs\PinCodePopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Dialogs\ResetPasswordPopup.xaml">

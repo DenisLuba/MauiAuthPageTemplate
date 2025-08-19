@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using MauiAuthPageTemplate.Resources.Strings.SignUpPageViewModelResources;
 using MauiAuthPageTemplate.Services;
+using System.Diagnostics;
 
 namespace MauiAuthPageTemplate.ViewModels;
 
@@ -70,6 +71,13 @@ public partial class SignUpPopupViewModel(AuthService authService) : ObservableO
                 await mainPage.Navigation.PopToRootAsync();
             }
         }
+    }
+    #endregion
+
+    #region DummyCommand
+    [RelayCommand]
+    public void Dummy() 
+    {
     }
     #endregion
 }

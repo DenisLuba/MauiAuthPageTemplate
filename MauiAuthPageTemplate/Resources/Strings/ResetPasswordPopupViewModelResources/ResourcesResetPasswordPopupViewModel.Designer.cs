@@ -22,7 +22,7 @@ namespace MauiAuthPageTemplate.Resources.Strings.ResetPasswordPopupViewModelReso
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class ResourcesResetPasswordPopupViewModel {
+    public class ResourcesResetPasswordPopupViewModel {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace MauiAuthPageTemplate.Resources.Strings.ResetPasswordPopupViewModelReso
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MauiAuthPageTemplate.Resources.Strings.ResetPasswordPopupViewModelResources.Resou" +
@@ -52,7 +52,7 @@ namespace MauiAuthPageTemplate.Resources.Strings.ResetPasswordPopupViewModelReso
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -64,7 +64,7 @@ namespace MauiAuthPageTemplate.Resources.Strings.ResetPasswordPopupViewModelReso
         /// <summary>
         ///   Looks up a localized string similar to Error.
         /// </summary>
-        internal static string error {
+        public static string error {
             get {
                 return ResourceManager.GetString("error", resourceCulture);
             }
@@ -73,7 +73,7 @@ namespace MauiAuthPageTemplate.Resources.Strings.ResetPasswordPopupViewModelReso
         /// <summary>
         ///   Looks up a localized string similar to No internet connection.
         /// </summary>
-        internal static string no_internet_connection {
+        public static string no_internet_connection {
             get {
                 return ResourceManager.GetString("no_internet_connection", resourceCulture);
             }
@@ -82,7 +82,7 @@ namespace MauiAuthPageTemplate.Resources.Strings.ResetPasswordPopupViewModelReso
         /// <summary>
         ///   Looks up a localized string similar to Password reset error.
         /// </summary>
-        internal static string password_reset_error {
+        public static string password_reset_error {
             get {
                 return ResourceManager.GetString("password_reset_error", resourceCulture);
             }
