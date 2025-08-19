@@ -76,6 +76,8 @@ dotnet maui run --device Pixel_5_Android_API_33
  Переименовать пространство имён проекта
 
    * Настроить Firebase SDK
+     
+   * Для настройки методов входа используй файл README для проекта [AuthenticationMAUI](https://github.com/DenisLuba/AuthenticationMAUI)
 
    * Заменить ресурсы (иконки, цвета, названия)
 
