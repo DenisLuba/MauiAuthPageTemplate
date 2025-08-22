@@ -4,6 +4,7 @@
              xmlns:strings="clr-namespace:MauiAuthPageTemplate.Resources.Strings.LoginWithPhonePopupResources"  
              xmlns:converters="clr-namespace:MauiAuthPageTemplate.Converters"
              xmlns:view_models="clr-namespace:MauiAuthPageTemplate.ViewModels"
+             xmlns:controls="clr-namespace:MauiAuthPageTemplate.Controls"
              BackgroundColor="Transparent"
              x:DataType="view_models:LoginWithPhoneViewModel"
              x:Class="MauiAuthPageTemplate.Dialogs.LoginWithPhonePopup">
@@ -12,98 +13,74 @@
         <converters:LoginWithPhonePopupConverter x:Key="LoginWithPhonePopupConverter" />
     </ContentPage.Resources>
 
-    <Grid>
-        <!-- 👇 Затемнённый фон с Tap -->
-        <BoxView>
-            <BoxView.GestureRecognizers>
-                <TapGestureRecognizer Command="{Binding CloseDialogCommand}" />
-            </BoxView.GestureRecognizers>
-        </BoxView>
+    <controls:DialogContainer CloseDialogCommand="{Binding CloseDialogCommand}">
+        <Grid RowDefinitions="Auto, Auto, Auto" ColumnDefinitions="Auto, *">
 
-        <!-- 👇 Центрированная форма -->
-        <Grid BackgroundColor="White" VerticalOptions="Center" HorizontalOptions="Fill" Margin="20">
-            <BoxView>
-                <BoxView.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding DummyCommand}" />
-                </BoxView.GestureRecognizers>
-            </BoxView>
+            <Label Grid.Row="0" Grid.ColumnSpan="2">
+                <Label.Text>
+                    <MultiBinding Converter="{StaticResource LoginWithPhonePopupConverter}" ConverterParameter="label">
+                        <Binding Path="IsVerificationCodeDialog" />
+                        <Binding Path="PhoneNumber" />
+                        <Binding Path="Code" />
+                    </MultiBinding>
+                </Label.Text>
+            </Label>
 
-            <Grid
-                    Padding="20"
-                    BackgroundColor="White"
-                    RowDefinitions="Auto, Auto, Auto" 
-                    ColumnDefinitions="Auto, *" 
-                    RowSpacing="10" 
-                    ColumnSpacing="10">
+            <Image Grid.Row="1" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="Start" HeightRequest="30">
+                <Image.Source>
+                    <MultiBinding Converter="{StaticResource LoginWithPhonePopupConverter}" ConverterParameter="image">
+                        <Binding Path="IsVerificationCodeDialog" />
+                        <Binding Path="PhoneNumber" />
+                        <Binding Path="Code" />
+                    </MultiBinding>
+                </Image.Source>
+            </Image>
 
-                <Label Grid.Row="0" Grid.ColumnSpan="2">
-                    <Label.Text>
-                        <MultiBinding Converter="{StaticResource LoginWithPhonePopupConverter}" ConverterParameter="label">
+            <Entry Grid.Row="1" Grid.Column="1" x:Name="entryLogin" Keyboard="Telephone">
+                <Entry.Text>
+                    <MultiBinding Converter="{StaticResource LoginWithPhonePopupConverter}" ConverterParameter="entrytext">
+                        <Binding Path="IsVerificationCodeDialog" />
+                        <Binding Path="PhoneNumber" />
+                        <Binding Path="Code" />
+                    </MultiBinding>
+                </Entry.Text>
+                <Entry.Placeholder>
+                    <MultiBinding Converter="{StaticResource LoginWithPhonePopupConverter}" ConverterParameter="entryplaceholder">
+                        <Binding Path="IsVerificationCodeDialog" />
+                        <Binding Path="PhoneNumber" />
+                        <Binding Path="Code" />
+                    </MultiBinding>
+                </Entry.Placeholder>
+            </Entry>
+
+            <!-- 🔲 Sign Up Button -->
+            <Grid Grid.Row="2" Grid.ColumnSpan="2" HorizontalOptions="Fill" ColumnDefinitions="*,*">
+                <Button Text="{x:Static strings:ResourcesLoginWithPhonePopup.cancel}" Command="{Binding CloseDialogCommand}" />
+                <Button Grid.Column="1">
+                    <Button.Text>
+                        <MultiBinding Converter="{StaticResource LoginWithPhonePopupConverter}" ConverterParameter="buttontext">
                             <Binding Path="IsVerificationCodeDialog" />
                             <Binding Path="PhoneNumber" />
                             <Binding Path="Code" />
                         </MultiBinding>
-                    </Label.Text>
-                </Label>
-
-                <Image Grid.Row="1" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="Start" HeightRequest="30">
-                    <Image.Source>
-                        <MultiBinding Converter="{StaticResource LoginWithPhonePopupConverter}" ConverterParameter="image">
+                    </Button.Text>
+                    <Button.Command>
+                        <MultiBinding Converter="{StaticResource LoginWithPhonePopupConverter}" ConverterParameter="buttoncommand">
                             <Binding Path="IsVerificationCodeDialog" />
                             <Binding Path="PhoneNumber" />
                             <Binding Path="Code" />
+                            <Binding Path="RequestVerificationCodeCommand" />
+                            <Binding Path="LoginWithCodeCommand" />
                         </MultiBinding>
-                    </Image.Source>
-                </Image>
-
-                <Entry Grid.Row="1" Grid.Column="1" x:Name="entryLogin" Keyboard="Telephone">
-                    <Entry.Text>
-                        <MultiBinding Converter="{StaticResource LoginWithPhonePopupConverter}" ConverterParameter="entrytext">
-                            <Binding Path="IsVerificationCodeDialog" />
-                            <Binding Path="PhoneNumber" />
-                            <Binding Path="Code" />
-                        </MultiBinding>
-                    </Entry.Text>
-                    <Entry.Placeholder>
-                        <MultiBinding Converter="{StaticResource LoginWithPhonePopupConverter}" ConverterParameter="entryplaceholder">
-                            <Binding Path="IsVerificationCodeDialog" />
-                            <Binding Path="PhoneNumber" />
-                            <Binding Path="Code" />
-                        </MultiBinding>
-                    </Entry.Placeholder>
-                </Entry>
-
-                <!-- 🔲 Sign Up Button -->
-                <Grid Grid.Row="2" Grid.ColumnSpan="2" HorizontalOptions="Fill" ColumnDefinitions="*,*">
-                    <Button Text="{x:Static strings:ResourcesLoginWithPhonePopup.cancel}" Command="{Binding CloseDialogCommand}" />
-                    <Button Grid.Column="1">
-                        <Button.Text>
-                            <MultiBinding Converter="{StaticResource LoginWithPhonePopupConverter}" ConverterParameter="buttontext">
-                                <Binding Path="IsVerificationCodeDialog" />
-                                <Binding Path="PhoneNumber" />
-                                <Binding Path="Code" />
-                            </MultiBinding>
-                        </Button.Text>
-                        <Button.Command>
-                            <MultiBinding Converter="{StaticResource LoginWithPhonePopupConverter}" ConverterParameter="buttoncommand">
-                                <Binding Path="IsVerificationCodeDialog" />
-                                <Binding Path="PhoneNumber" />
-                                <Binding Path="Code" />
-                                <Binding Path="RequestVerificationCodeCommand" />
-                                <Binding Path="LoginWithCodeCommand" />
-                            </MultiBinding>
-                        </Button.Command>
-                    </Button>
-
-                </Grid>
-
+                    </Button.Command>
+                </Button>
             </Grid>
+
+            <!-- 👇 Индикатор загрузки -->
+            <ActivityIndicator
+                    IsRunning="{Binding Source={x:Static Application.Current}, Path=IsBusy}"
+                    IsVisible="{Binding Source={x:Static Application.Current}, Path=IsBusy}" />
         </Grid>
-        <!-- 👇 Индикатор загрузки -->
-        <ActivityIndicator
-            IsRunning="{Binding Source={x:Static Application.Current}, Path=IsBusy}"
-            IsVisible="{Binding Source={x:Static Application.Current}, Path=IsBusy}" />
 
-
-    </Grid>
+    </controls:DialogContainer>
 </ContentPage>

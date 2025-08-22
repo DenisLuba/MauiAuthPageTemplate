@@ -203,6 +203,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Controls\DialogContainer.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Dialogs\LocalAuthDialog.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

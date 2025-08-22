@@ -5,7 +5,7 @@
              x:Class="MauiAuthPageTemplate.App">
     <Application.Resources>
         <ResourceDictionary>
-            
+
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
@@ -62,13 +62,6 @@
                 <Setter Property="VerticalOptions" Value="Center" />
                 <Setter Property="WidthRequest" Value="70" />
                 <Setter Property="HeightRequest" Value="70" />
-            </Style>
-
-            <!-- BoxView -->
-            <Style TargetType="BoxView">
-                <Setter Property="BackgroundColor" Value="#80000000" />
-                <Setter Property="HorizontalOptions" Value="Fill" />
-                <Setter Property="VerticalOptions" Value="Fill" />
             </Style>
 
         </ResourceDictionary>
