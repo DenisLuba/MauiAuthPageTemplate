@@ -38,9 +38,4 @@ public partial class ResetPasswordPopupViewModel(AuthService authService) : Obse
         EmailConfirmed?.Invoke(this, EventArgs.Empty);
     }
     #endregion
-
-    #region DummyCommand
-    [RelayCommand]
-    public void Dummy() { }
-    #endregion
 }

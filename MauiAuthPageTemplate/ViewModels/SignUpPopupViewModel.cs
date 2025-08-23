@@ -73,11 +73,4 @@ public partial class SignUpPopupViewModel(AuthService authService) : ObservableO
         }
     }
     #endregion
-
-    #region DummyCommand
-    [RelayCommand]
-    public void Dummy() 
-    {
-    }
-    #endregion
 }

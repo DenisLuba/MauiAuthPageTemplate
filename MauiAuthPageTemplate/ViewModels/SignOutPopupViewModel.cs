@@ -40,9 +40,4 @@ public partial class SignOutPopupViewModel(AuthService authService, LocalAuthPre
         CloseDialogEvent?.Invoke(this, EventArgs.Empty);
     }
     #endregion
-
-    #region DummyCommand
-    [RelayCommand]
-    public void Dummy() { } 
-    #endregion
 }

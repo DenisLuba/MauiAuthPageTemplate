@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView x:Class="MauiAuthPageTemplate.Controls.InputField"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:self="clr-namespace:MauiAuthPageTemplate.Controls">
+
+	<Grid Margin="0,4,0,12"
+	      ColumnDefinitions="Auto, *"
+	      ColumnSpacing="10"
+	      HorizontalOptions="Fill"
+	      RowDefinitions="Auto, Auto"
+	      VerticalOptions="Center">
+
+		<Image Grid.RowSpan="2"
+		       HeightRequest="30"
+		       Source="{Binding InputImageSource, Source={x:RelativeSource AncestorType={x:Type self:InputField}}}" />
+
+		<Entry x:Name="inputEntry"
+		       Grid.Row="0"
+		       Grid.Column="1"
+		       HorizontalOptions="Fill"
+		       HorizontalTextAlignment="Start"
+		       IsPassword="{Binding IsPassword, Source={x:RelativeSource AncestorType={x:Type self:InputField}}}"
+		       Keyboard="{Binding Keyboard, Source={x:RelativeSource AncestorType={x:Type self:InputField}}}"
+		       Placeholder="{Binding Placeholder, Source={x:RelativeSource AncestorType={x:Type self:InputField}}}"
+		       ReturnCommand="{Binding ReturnCommand, Source={x:RelativeSource AncestorType={x:Type self:InputField}}}"
+		       ReturnType="{Binding ReturnInputType, Source={x:RelativeSource AncestorType={x:Type self:InputField}}}"
+		       Text="{Binding InputText, Source={x:RelativeSource AncestorType={x:Type self:InputField}}}"
+		       VerticalOptions="End"
+		       VerticalTextAlignment="Center" />
+
+		<Label Grid.Row="1"
+		       Grid.Column="1"
+		       FontSize="11"
+		       HorizontalOptions="Fill"
+		       HorizontalTextAlignment="End"
+		       Text="{Binding HintText, Source={x:RelativeSource AncestorType={x:Type self:InputField}}}"
+		       TextColor="SlateGray"
+		       VerticalOptions="End"
+		       VerticalTextAlignment="End" />
+
+	</Grid>
+</ContentView>

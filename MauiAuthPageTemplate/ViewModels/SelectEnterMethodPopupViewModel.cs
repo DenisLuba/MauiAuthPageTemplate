@@ -14,7 +14,7 @@ public partial class SelectEnterMethodPopupViewModel(LocalAuthPreferencesService
     [ObservableProperty]
     private bool _isPatternSelected;
     [ObservableProperty]
-    private bool _isPinSelected;
+    private bool _isPinSelected = true;
     [ObservableProperty]
     private bool _isFaceIdSelected;
     [ObservableProperty]
@@ -56,10 +56,5 @@ public partial class SelectEnterMethodPopupViewModel(LocalAuthPreferencesService
     {
         LoginMethodSelected?.Invoke(this, EventArgs.Empty);
     } 
-    #endregion
-
-    #region DummyCommand
-    [RelayCommand]
-    public void Dummy() { }
     #endregion
 }

@@ -14,7 +14,7 @@ internal static class GlobalValues
                                                                                                               // (Google Cloud Console > APIs & Services > Credentials > Auth 2.0 Client IDs > Web client (auto created by Google Service) > Authorized redirect URIs)
                                                                                                               // также для Facebook в Valid OAuth Redirect URIs
 
-    internal const bool IS_TEST = false; // Если true, то используется тестовый токен reCAPTCHA, иначе - реальный токен. Тестовый токен не требует проверки и всегда возвращает успешный результат.
+    internal const bool IS_TEST = true; // Если true, то используется тестовый токен reCAPTCHA, иначе - реальный токен. Тестовый токен не требует проверки и всегда возвращает успешный результат.
     internal const string RECAPTCHA_TOKEN = "test"; // ReCaptcha для аутентификации по номеру телефона
     internal const string SITE_KEY = "6LfOnpgrAAAAAHZCjNkjAwIHlHBSK5c4SfM8cdzP"; // публичный ключ, который выдает Google при регистрации reCAPTCHA (вставляется в HTML/JS и передается в клиент).
     internal const string SECRET_KEY = "6LfOnpgrAAAAAM4TvNXNjC89xggz29ojs3RgyoGl"; // секретный ключ, который выдает Google при регистрации reCAPTCHA (используется только на сервере для проверки токена).

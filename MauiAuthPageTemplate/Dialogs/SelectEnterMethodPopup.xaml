@@ -1,55 +1,87 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<ContentPage x:Class="MauiAuthPageTemplate.Dialogs.SelectEnterMethodPopup"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:strings="clr-namespace:MauiAuthPageTemplate.Resources.Strings.SelectEnterMethodPopupResources"
              xmlns:controls="clr-namespace:MauiAuthPageTemplate.Controls"
+             xmlns:strings="clr-namespace:MauiAuthPageTemplate.Resources.Strings.SelectEnterMethodPopupResources"
              xmlns:view_models="clr-namespace:MauiAuthPageTemplate.ViewModels"
              x:DataType="view_models:SelectEnterMethodPopupViewModel"
-             x:Class="MauiAuthPageTemplate.Dialogs.SelectEnterMethodPopup"
              BackgroundColor="Transparent">
 
-    <controls:DialogContainer CloseDialogCommand="{Binding ApplyCommand}">
-        <VerticalStackLayout Padding="20" VerticalOptions="Center" BackgroundColor="White">
-            <!-- Заголовок -->
-            <Label Text="{x:Static strings:ResourcesSelectEnterMethodPopup.select_login_method}" FontSize="Title" HorizontalOptions="Center" />
+	<controls:DialogContainer CloseDialogCommand="{Binding ApplyCommand}">
+		<VerticalStackLayout Padding="20"
+		                     BackgroundColor="White"
+		                     VerticalOptions="Center">
+			<!--  Заголовок  -->
+			<Label FontSize="Title"
+			       HorizontalOptions="Center"
+			       Text="{x:Static strings:ResourcesSelectEnterMethodPopup.select_login_method}" />
 
-            <!-- Основной метод -->
-            <VerticalStackLayout Padding="0, 50, 0, 20">
-                <Label Text="{x:Static strings:ResourcesSelectEnterMethodPopup.select_main_login_method}" FontSize="Subtitle" HorizontalOptions="Start" IsVisible="{OnPlatform Android=True, iOS=True, WinUI=False, MacCatalyst=False}" />
+			<!--  Основной метод  -->
+			<VerticalStackLayout Padding="0,50,0,20">
+				<Label FontSize="Subtitle"
+				       HorizontalOptions="Start"
+				       IsVisible="{OnPlatform Android=True,
+				                              iOS=True,
+				                              WinUI=False,
+				                              MacCatalyst=False}"
+				       Text="{x:Static strings:ResourcesSelectEnterMethodPopup.select_main_login_method}" />
 
-                <RadioButton Content="{x:Static strings:ResourcesSelectEnterMethodPopup.pin_code}"
-                      GroupName="MainMethod"
-                      IsChecked="{Binding IsPinSelected}" />
-                <RadioButton Content="{x:Static strings:ResourcesSelectEnterMethodPopup.pattern}"
-                      GroupName="MainMethod"
-                      IsChecked="{Binding IsPatternSelected}" />
-            </VerticalStackLayout>
+				<RadioButton Content="{x:Static strings:ResourcesSelectEnterMethodPopup.pin_code}"
+				             GroupName="MainMethod"
+				             IsChecked="{Binding IsPinSelected}" />
+				<RadioButton Content="{x:Static strings:ResourcesSelectEnterMethodPopup.pattern}"
+				             GroupName="MainMethod"
+				             IsChecked="{Binding IsPatternSelected}" />
+			</VerticalStackLayout>
 
-            <!-- Дополнительные методы -->
-            <VerticalStackLayout Margin="0, 20, 0, 50" HorizontalOptions="Fill">
-                <Label Text="{x:Static strings:ResourcesSelectEnterMethodPopup.select_additional_login_method}" FontSize="Subtitle" HorizontalOptions="Start" IsVisible="{OnPlatform Android=True, iOS=True, WinUI=False, MacCatalyst=False}" />
+			<!--  Дополнительные методы  -->
+			<VerticalStackLayout Margin="0,20,0,50"
+			                     HorizontalOptions="Fill">
+				<Label FontSize="Subtitle"
+				       HorizontalOptions="Start"
+				       IsVisible="{OnPlatform Android=True,
+				                              iOS=True,
+				                              WinUI=False,
+				                              MacCatalyst=False}"
+				       Text="{x:Static strings:ResourcesSelectEnterMethodPopup.select_additional_login_method}" />
 
-                <Grid IsVisible="{OnPlatform Android=True, iOS=True, WinUI=False, MacCatalyst=False}" HorizontalOptions="Fill" ColumnDefinitions="Auto, *">
-                    <Grid.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding ToggleFaceIdCommand}" />
-                    </Grid.GestureRecognizers>
+				<Grid ColumnDefinitions="Auto, *"
+				      HorizontalOptions="Fill"
+				      IsVisible="{OnPlatform Android=True,
+				                             iOS=True,
+				                             WinUI=False,
+				                             MacCatalyst=False}">
+					<Grid.GestureRecognizers>
+						<TapGestureRecognizer Command="{Binding ToggleFaceIdCommand}" />
+					</Grid.GestureRecognizers>
 
-                    <CheckBox IsChecked="{Binding Path=IsFaceIdSelected, Mode=TwoWay}" />
-                    <Label Grid.Column="1" Text="{x:Static strings:ResourcesSelectEnterMethodPopup.face_id}" HorizontalOptions="Start" />
-                </Grid>
+					<CheckBox IsChecked="{Binding Path=IsFaceIdSelected, Mode=TwoWay}" />
+					<Label Grid.Column="1"
+					       HorizontalOptions="Start"
+					       Text="{x:Static strings:ResourcesSelectEnterMethodPopup.face_id}" />
+				</Grid>
 
-                <Grid IsVisible="{OnPlatform Android=True, iOS=True, WinUI=False, MacCatalyst=False}" HorizontalOptions="Fill" ColumnDefinitions="Auto, *">
-                    <Grid.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding ToggleFingerprintCommand}" />
-                    </Grid.GestureRecognizers>
+				<Grid ColumnDefinitions="Auto, *"
+				      HorizontalOptions="Fill"
+				      IsVisible="{OnPlatform Android=True,
+				                             iOS=True,
+				                             WinUI=False,
+				                             MacCatalyst=False}">
+					<Grid.GestureRecognizers>
+						<TapGestureRecognizer Command="{Binding ToggleFingerprintCommand}" />
+					</Grid.GestureRecognizers>
 
-                    <CheckBox IsChecked="{Binding IsFingerprintSelected}" />
-                    <Label Grid.Column="1" Text="{x:Static strings:ResourcesSelectEnterMethodPopup.fingerprint}" HorizontalOptions="Start" />
-                </Grid>
-            </VerticalStackLayout>
+					<CheckBox IsChecked="{Binding IsFingerprintSelected}" />
+					<Label Grid.Column="1"
+					       HorizontalOptions="Start"
+					       Text="{x:Static strings:ResourcesSelectEnterMethodPopup.fingerprint}" />
+				</Grid>
+			</VerticalStackLayout>
 
-            <Button Text="{x:Static strings:ResourcesSelectEnterMethodPopup.apply}" Command="{Binding ApplyCommand}"/>
+			<Button Command="{Binding ApplyCommand}"
+			        Text="{x:Static strings:ResourcesSelectEnterMethodPopup.apply}" />
 
-        </VerticalStackLayout>
-    </controls:DialogContainer>
+		</VerticalStackLayout>
+	</controls:DialogContainer>
 </ContentPage>

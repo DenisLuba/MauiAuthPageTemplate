@@ -18,6 +18,13 @@ public partial class SignUpPopup : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        entryLogin.Focus();
+
+        if (BindingContext is SignUpPopupViewModel viewModel)
+        {
+            viewModel.Username = string.Empty;
+            viewModel.Email = string.Empty;
+            viewModel.Password = string.Empty;
+            viewModel.ConfirmPassword = string.Empty;
+        }
     }
 }

@@ -11,5 +11,6 @@ public partial class LoginWithPhonePopup : ContentPage
 		BindingContext = viewModel;
 
 		viewModel.CloseDialogEvent += async (_, _) => await navigation.PopModalAsync();
+		viewModel.CleanEntryEvent += (_, _) => Input.InputText = string.Empty;
     }
 }

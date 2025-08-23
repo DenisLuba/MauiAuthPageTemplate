@@ -1,46 +1,66 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"  
-               xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"  
-               xmlns:strings="clr-namespace:MauiAuthPageTemplate.Resources.Strings.SignUpPopupResources"  
-               xmlns:controls="clr-namespace:MauiAuthPageTemplate.Controls"
-               xmlns:view_models="clr-namespace:MauiAuthPageTemplate.ViewModels"
-               x:DataType="view_models:SignUpPopupViewModel"
-               BackgroundColor="Transparent"
-               x:Class="MauiAuthPageTemplate.Dialogs.SignUpPopup">
+<ContentPage x:Class="MauiAuthPageTemplate.Dialogs.SignUpPopup"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:MauiAuthPageTemplate.Controls"
+             xmlns:strings="clr-namespace:MauiAuthPageTemplate.Resources.Strings.SignUpPopupResources"
+             xmlns:view_models="clr-namespace:MauiAuthPageTemplate.ViewModels"
+             x:DataType="view_models:SignUpPopupViewModel"
+             BackgroundColor="Transparent">
 
-    <controls:DialogContainer CloseDialogCommand="{Binding ClosePageCommand}">
-        <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto" ColumnDefinitions="Auto, *">
+	<controls:DialogContainer CloseDialogCommand="{Binding ClosePageCommand}">
+		<Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto">
 
-            <!-- 😎 Login -->
-            <Label Grid.Row="0" Grid.Column="0" HorizontalOptions="Start" Text="{x:Static strings:ResourcesSignUpPopup.login}" />
-            <Entry Grid.Row="0" Grid.Column="1" x:Name="entryLogin" Placeholder="{x:Static strings:ResourcesSignUpPopup.login}" Text="{Binding Username}"  ReturnType="Next" />
+			<!--  😎 Login  -->
+			<controls:InputField HintText="{x:Static strings:ResourcesSignUpPopup.login}"
+			                     InputImageSource="login_logo.png"
+			                     InputText="{Binding Username}"
+			                     Placeholder="{x:Static strings:ResourcesSignUpPopup.login}"
+			                     ReturnInputType="Next" />
 
+			<!--  📧 Email  -->
+			<controls:InputField Grid.Row="1"
+			                     HintText="{x:Static strings:ResourcesSignUpPopup.email}"
+			                     InputImageSource="mail_logo.png"
+			                     InputText="{Binding Email}"
+			                     KeyboardType="Email"
+			                     Placeholder="{x:Static strings:ResourcesSignUpPopup.email}"
+			                     ReturnInputType="Next" />
 
-            <!-- 📧 Email -->
-            <Label Grid.Row="1" Grid.Column="0" HorizontalOptions="Start" Text="{x:Static strings:ResourcesSignUpPopup.email}" />
-            <Entry Grid.Row="1" Grid.Column="1" Placeholder="{x:Static strings:ResourcesSignUpPopup.email}" Text="{Binding Email}" Keyboard="Email" ReturnType="Next" />
+			<!--  🔑 Password  -->
+			<controls:InputField Grid.Row="2"
+			                     HintText="{x:Static strings:ResourcesSignUpPopup.password}"
+			                     InputImageSource="password_logo.png"
+			                     InputText="{Binding Password}"
+			                     IsPassword="True"
+			                     Placeholder="{x:Static strings:ResourcesSignUpPopup.password}"
+			                     ReturnInputType="Next" />
 
+			<!--  🔑 Confirm Password  -->
+			<controls:InputField Grid.Row="3"
+			                     HintText="{x:Static strings:ResourcesSignUpPopup.confirm_password}"
+			                     InputImageSource="password_logo.png"
+			                     InputText="{Binding ConfirmPassword}"
+			                     IsPassword="True"
+			                     Placeholder="{x:Static strings:ResourcesSignUpPopup.confirm_password}"
+			                     ReturnCommand="{Binding SignUpCommand}" />
 
-            <!-- 🔑 Password -->
-            <Label Grid.Row="2" Grid.Column="0" HorizontalOptions="Start" Text="{x:Static strings:ResourcesSignUpPopup.password}" />
-            <Entry Grid.Row="2" Grid.Column="1" Placeholder="{x:Static strings:ResourcesSignUpPopup.password}" Text="{Binding Password}" IsPassword="True" ReturnType="Next" />
+			<!--  Buttons  -->
+			<Grid Grid.Row="4"
+			      Grid.ColumnSpan="2"
+			      Margin="0,30,0,0"
+			      ColumnDefinitions="*, *">
 
+				<!--  ⏮️ Cancel Button  -->
+				<Button Command="{Binding ClosePageCommand}"
+				        Text="{x:Static strings:ResourcesSignUpPopup.cancel}" />
 
-            <!-- 🔑 Confirm Password -->
-            <Label Grid.Row="3" Grid.Column="0" HorizontalOptions="Start" Text="{x:Static strings:ResourcesSignUpPopup.confirm_password}" />
-            <Entry Grid.Row="3" Grid.Column="1" Placeholder="{x:Static strings:ResourcesSignUpPopup.confirm_password}" Text="{Binding ConfirmPassword}" IsPassword="True" ReturnCommand="{Binding SignUpCommand}" />
-
-
-            <!-- Buttons -->
-            <Grid Grid.Row="4" Grid.ColumnSpan="2" ColumnDefinitions="*, *" >
-                <!-- ⏮️ Cancel Button -->
-                <Button Text="{x:Static strings:ResourcesSignUpPopup.cancel}" Command="{Binding ClosePageCommand}" />
-
-                <!-- 🔲 Sign Up Button -->
-                <Button Grid.Row="4" Grid.Column="1" Text="{x:Static strings:ResourcesSignUpPopup.sign_up}" Command="{Binding SignUpCommand}" />
-            </Grid>
-        </Grid>
-    </controls:DialogContainer>
+				<!--  🔲 Sign Up Button  -->
+				<Button Grid.Column="1"
+				        Command="{Binding SignUpCommand}"
+				        Text="{x:Static strings:ResourcesSignUpPopup.sign_up}" />
+			</Grid>
+		</Grid>
+	</controls:DialogContainer>
 
 </ContentPage>
-               

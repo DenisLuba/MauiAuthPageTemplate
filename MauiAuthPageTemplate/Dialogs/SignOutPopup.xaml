@@ -1,25 +1,33 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<ContentPage x:Class="MauiAuthPageTemplate.Dialogs.SignOutPopup"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:MauiAuthPageTemplate.Controls"
              xmlns:strings="clr-namespace:MauiAuthPageTemplate.Resources.Strings.SignOutPopupResources"
              xmlns:view_models="clr-namespace:MauiAuthPageTemplate.ViewModels"
              x:DataType="view_models:SignOutPopupViewModel"
-             BackgroundColor="Transparent"
-             x:Class="MauiAuthPageTemplate.Dialogs.SignOutPopup" >
+             BackgroundColor="Transparent">
 
-    <controls:DialogContainer CloseDialogCommand="{Binding CloseDialogCommand}">
-        <VerticalStackLayout Padding="20" HorizontalOptions="Center" VerticalOptions="Center" Spacing="20" BackgroundColor="White">
-            <!-- Sign Out Label -->
-            <Label Text="{x:Static strings:ResourcesSignOutPopup.sure_sign_out}" />
+	<controls:DialogContainer CloseDialogCommand="{Binding CloseDialogCommand}">
+		<VerticalStackLayout Padding="20"
+		                     BackgroundColor="White"
+		                     HorizontalOptions="Center"
+		                     Spacing="20"
+		                     VerticalOptions="Center">
+			<!--  Sign Out Label  -->
+			<Label Text="{x:Static strings:ResourcesSignOutPopup.sure_sign_out}" />
 
-            <!-- Buttons -->
-            <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="20">
-                <Button Text="{x:Static strings:ResourcesSignOutPopup.sign_out}" Command="{Binding SignOutCommand}" />
-                <Button Text="{x:Static strings:ResourcesSignOutPopup.cancel}" Command="{Binding CloseDialogCommand}" />
-            </HorizontalStackLayout>
-        </VerticalStackLayout>
+			<!--  Buttons  -->
+			<HorizontalStackLayout HorizontalOptions="Center"
+			                       Spacing="20"
+			                       VerticalOptions="Center">
+				<Button Command="{Binding SignOutCommand}"
+				        Text="{x:Static strings:ResourcesSignOutPopup.sign_out}" />
+				<Button Command="{Binding CloseDialogCommand}"
+				        Text="{x:Static strings:ResourcesSignOutPopup.cancel}" />
+			</HorizontalStackLayout>
+		</VerticalStackLayout>
 
-    </controls:DialogContainer>
-   
+	</controls:DialogContainer>
+
 </ContentPage>

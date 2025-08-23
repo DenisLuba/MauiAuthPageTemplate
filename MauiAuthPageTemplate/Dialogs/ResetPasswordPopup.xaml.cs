@@ -16,6 +16,8 @@ public partial class ResetPasswordPopup : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        emailEntry.Text = string.Empty;
+
+        if (BindingContext is ResetPasswordPopupViewModel viewModel)
+            viewModel.Email = string.Empty;
     }
 }

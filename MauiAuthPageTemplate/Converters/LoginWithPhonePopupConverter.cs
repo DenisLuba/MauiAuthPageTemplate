@@ -27,10 +27,6 @@ public class LoginWithPhonePopupConverter : IMultiValueConverter
             var requestCmd = values.ElementAtOrDefault(3) as ICommand;
             var loginCmd = values.ElementAtOrDefault(4) as ICommand;
 
-            Trace.WriteLine($"IsVerificationCodeDialog = {IsVerificationCodeDialog}");
-            Trace.WriteLine($"RequestCmd = {requestCmd?.GetType().Name}");
-            Trace.WriteLine($"LoginCmd = {loginCmd?.GetType().Name}");
-
             return IsVerificationCodeDialog
                 ? loginCmd ?? Binding.DoNothing
                 : requestCmd ?? Binding.DoNothing;

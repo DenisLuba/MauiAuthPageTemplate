@@ -24,6 +24,7 @@ public partial class LoginWithPhoneViewModel(AuthService authService)  : Observa
 
     #region Events
     public EventHandler<bool>? CloseDialogEvent { get; set; }
+    public EventHandler<bool>? CleanEntryEvent { get; set; }
     #endregion
 
     #region RequestVerificationCodeCommand 
@@ -40,9 +41,8 @@ public partial class LoginWithPhoneViewModel(AuthService authService)  : Observa
             var result = await authService.RequestVerificationCodeAsync(PhoneNumber, GlobalValues.IS_TEST);
             if (result == Result.Success)
             {
+                CleanEntryEvent?.Invoke(this, true);
                 IsVerificationCodeDialog = true; // Switch to code entry mode
-                PhoneNumber = string.Empty; // Clean the entry field
-                Code = string.Empty; // Clean the entry field
             }
             else if (result == Result.NoInternetConnection)
             {
@@ -76,9 +76,8 @@ public partial class LoginWithPhoneViewModel(AuthService authService)  : Observa
             var result = await authService.LoginWithVerificationCodeAsync(Code);
             if (result is Result.Success)
             {
+                CleanEntryEvent?.Invoke(this, true);
                 IsVerificationCodeDialog = false; 
-                PhoneNumber = string.Empty;
-                Code = string.Empty;
                 await Shell.Current.GoToAsync(GlobalValues.MainPage);
                 CloseDialogEvent?.Invoke(this, true); // Notify that the dialog should close
             }
@@ -100,16 +99,6 @@ public partial class LoginWithPhoneViewModel(AuthService authService)  : Observa
     }
     #endregion
 
-    #region NavigateToPhoneNumberEntryCommand
-    [RelayCommand]
-    public void NavigateToPhoneNumberEntry()
-    {
-        IsVerificationCodeDialog = false; // Switch to phone number entry mode
-        PhoneNumber = string.Empty; // Clear the phone number field
-        Code = string.Empty; // Clear the code field
-    } 
-    #endregion
-
     #region CloseDialogCommand
     [RelayCommand]
     public void CloseDialog()
@@ -117,10 +106,5 @@ public partial class LoginWithPhoneViewModel(AuthService authService)  : Observa
         IsVerificationCodeDialog = false;
         CloseDialogEvent?.Invoke(this, false);
     }
-    #endregion
-
-    #region DummyCommand
-    [RelayCommand]
-    public void Dummy() { }
     #endregion
 }
