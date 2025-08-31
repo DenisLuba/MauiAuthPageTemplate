@@ -5,16 +5,16 @@ namespace MauiAuthPageTemplate.Services;
 public class NavigationService : INavigationService
 {
     #region Private Flags
-    // new(1,1) - SemaphoreSlim with an initial count of 1 active thread and a maximum count of 1 active thread.
+    // new(1,1) - SemaphoreSlim только с одним начальным активным потоком и максимум только с одним активным потоком.
     private readonly SemaphoreSlim _modalSemaphore = new(1, 1);
     private readonly SemaphoreSlim _pageSemaphore = new(1, 1);
     #endregion
 
     #region GetNavigation Method
     /// <summary>
-    /// Gets the current navigation instance from the Shell or Application.
+    /// Выдает текущий экземпляр навигации от Shell или Application.
     /// </summary>
-    /// <returns>The <see cref="INavigation"/> for handling stack-based navigation.</returns>
+    /// <returns><see cref="INavigation"/> для обработки навигации на основе стека.</returns>
     private INavigation? GetNavigation() =>
         Application.Current?
         .Windows.FirstOrDefault(window => window.Page is not null)?
@@ -24,18 +24,18 @@ public class NavigationService : INavigationService
 
     #region PushModalAsync Method
     /// <summary>
-    /// Pushes a modal page onto the navigation stack.
+    /// Кладет модальную страницу в навигационный стек.
     /// </summary>
-    /// <param name="page">The modal <see cref="Page"/> that will be pushed on the navigation stack.</param>
-    /// <param name="animated">A <see cref="bool"/> parameter that indicates whether the transition should be animated.</param>
+    /// <param name="page">Модальная страница (<see cref="Page"/>), которая будет положена в стек навигации.</param>
+    /// <param name="animated">Параметр типа <see cref="bool"/> который указывает, должен ли переход быть анимирован.</param>
     public async Task PushModalAsync(Page page, bool animated = false)
     {
         var navigation = GetNavigation();
         if (navigation is null || navigation.ModalStack.Count > 0) return;
 
-        // SemaphoreSlim is used to ensure that only one modal can be pushed at a time.
+        // SemaphoreSlim используется, чтобы обеспечить то, что только одна модальная страница может быть положена в стек за 1 раз.
 
-        // WaitAsync is used to asynchronously wait for the semaphore to be available.
+        // WaitAsync используется для асинхронного ожидания момента, когда семафор станет доступен.
         await _modalSemaphore.WaitAsync();
         try
         {
@@ -43,7 +43,7 @@ public class NavigationService : INavigationService
         }
         finally
         {
-            // Release the semaphore to allow other modals to be pushed.
+            // Отпускаем семафор, чтобы позволить положить в стек другие модальные страницы.
             _modalSemaphore.Release();
         }
     }
@@ -51,17 +51,17 @@ public class NavigationService : INavigationService
 
     #region PopModalAsync Method
     /// <summary>
-    /// Pops the top modal page off the navigation stack.
+    /// Убирает верхнюю модальную страницу из навигационного стека.
     /// </summary>
-    /// <param name="animated">A <see cref="bool"/> parameter that indicates whether the transition should be animated.</param>
+    /// <param name="animated">Параметр типа <see cref="bool"/> который указывает, должен ли переход быть анимирован.</param>
     public async Task PopModalAsync(bool animated = false)
     {
         var navigation = GetNavigation();
         if (navigation is null || navigation.ModalStack.Count == 0) return;
 
-        // SemaphoreSlim is used to ensure that only one modal can be popped at a time.
+        // SemaphoreSlim используется, чтобы обеспечить то, что только одна модальная страница может быть убрана из стека за 1 раз.
 
-        // WaitAsync is used to asynchronously wait for the semaphore to be available.
+        // WaitAsync используется для асинхронного ожидания момента, когда семафор станет доступен.
         await _modalSemaphore.WaitAsync();
         try
         {
@@ -69,7 +69,7 @@ public class NavigationService : INavigationService
         }
         finally
         {
-            // Release the semaphore to allow other modals to be popped.
+            // Отпускаем семафор, чтобы дать возможность другим модальным станицам быть убранными из стека навигации.
             _modalSemaphore.Release();
         }
     }
@@ -77,18 +77,18 @@ public class NavigationService : INavigationService
 
     #region PushAsync Method
     /// <summary>
-    /// Pushes a page onto the navigation stack.
+    /// Кладет страницу в навигационный стек.
     /// </summary>
-    /// <param name="page">The <see cref="Page"/> that will be pushed on the navigation stack.</param>
-    /// <param name="animated">A <see cref="bool"/> parameter that indicates whether the transition should be animated.</param>
+    /// <param name="page">Страница (<see cref="Page"/>), которая будет положена в стек навигации.</param>
+    /// <param name="animated">Параметр типа <see cref="bool"/> который указывает, должен ли переход быть анимирован.</param>
     public async Task PushAsync(Page page, bool animated = false)
     {
         var navigation = GetNavigation();
         if (navigation is null) return;
 
-        // SemaphoreSlim is used to ensure that only one page can be pushed at a time.
+        // SemaphoreSlim используется, чтобы обеспечить то, что только одна страница может быть положена в стек за 1 раз.
 
-        // WaitAsync is used to asynchronously wait for the semaphore to be available.
+        // WaitAsync используется для асинхронного ожидания момента, когда семафор станет доступен.
         await _pageSemaphore.WaitAsync();
         try
         {
@@ -96,7 +96,7 @@ public class NavigationService : INavigationService
         }
         finally
         {
-            // Release the semaphore to allow other pages to be pushed.
+            // Отпускаем семафор, чтобы позволить положить в стек другие страницы.
             _pageSemaphore.Release();
         }
     }
@@ -104,17 +104,17 @@ public class NavigationService : INavigationService
 
     #region PopAsync Method
     /// <summary>
-    /// Pops the top page off the navigation stack.
+    /// Убирает верхнюю страницу из навигационного стека.
     /// </summary>
-    /// <param name="animated">A <see cref="bool"/> parameter that indicates whether the transition should be animated.</param>
+    /// <param name="animated">Параметр типа <see cref="bool"/> который указывает, должен ли переход быть анимирован.</param>
     public async Task PopAsync(bool animated = false)
     {
         var navigation = GetNavigation();
         if (navigation is null || navigation.NavigationStack.Count <= 1) return;
 
-        // SemaphoreSlim is used to ensure that only one page can be popped at a time.
+        // SemaphoreSlim используется, чтобы обеспечить то, что только одна страница может быть убрана из стека за 1 раз.
 
-        // WaitAsync is used to asynchronously wait for the semaphore to be available.
+        // WaitAsync используется для асинхронного ожидания момента, когда семафор станет доступен.
         await _pageSemaphore.WaitAsync();
         try
         {
@@ -122,7 +122,7 @@ public class NavigationService : INavigationService
         }
         finally
         {
-            // Release the semaphore to allow other pages to be popped.
+            // Отпускаем семафор, чтобы дать возможность другим станицам быть убранными из стека навигации.
             _pageSemaphore.Release();
         }
     }

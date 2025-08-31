@@ -10,16 +10,22 @@ public partial class MainPage : ContentPage
     INavigationService _navigationService;
     LocalAuthPreferencesService _preferencesService;
     SelectEnterMethodPopupViewModel _enterMethodPopupViewModel;
+    SecurityService _securityService;
 
     private bool IsShownDialog = false;
 
-    public MainPage(INavigationService navigation, LocalAuthPreferencesService preferencesService, SelectEnterMethodPopupViewModel enterMethodPopupViewModel)
+    public MainPage(
+        INavigationService navigation, 
+        LocalAuthPreferencesService preferencesService, 
+        SelectEnterMethodPopupViewModel enterMethodPopupViewModel, 
+        SecurityService securityService)
     {
         InitializeComponent();
 
         _navigationService = navigation;
         _preferencesService = preferencesService;
         _enterMethodPopupViewModel = enterMethodPopupViewModel;
+        _securityService = securityService;
     }
 
     protected override async void OnAppearing()
@@ -34,7 +40,12 @@ public partial class MainPage : ContentPage
                         IsShownDialog;
 
         if (!IsShownDialog)
-            await _navigationService.PushModalAsync(new SelectEnterMethodPopup(_enterMethodPopupViewModel, _navigationService));
+            await _navigationService.PushModalAsync(new SelectEnterMethodPopup(
+                _enterMethodPopupViewModel, 
+                _navigationService, 
+                _preferencesService, 
+                _securityService));
+
 
         IsShownDialog = true;
     }

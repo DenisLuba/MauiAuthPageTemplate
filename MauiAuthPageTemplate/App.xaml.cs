@@ -10,7 +10,8 @@ namespace MauiAuthPageTemplate
         private readonly AuthService _authService;
         private readonly SignOutPopupViewModel _signOutPopupViewModel;
         private readonly INavigationService _navigation;
-        private readonly LocalAuthPreferencesService _preferencesService;
+        private readonly SecurityService _securityService;
+        private readonly LocalAuthPreferencesService _localAuthPreferencesService;
 
         private bool isBusy;
         public bool IsBusy
@@ -26,18 +27,24 @@ namespace MauiAuthPageTemplate
             }
         }
 
-        public App(AuthService authService, SignOutPopupViewModel signOutPopupViewModel, INavigationService navigation, LocalAuthPreferencesService preferencesService)
+        public App(
+            AuthService authService,
+            SignOutPopupViewModel signOutPopupViewModel,
+            INavigationService navigation,
+            SecurityService securityService,
+            LocalAuthPreferencesService preferencesService)
         {
             InitializeComponent();
             _authService = authService;
             _signOutPopupViewModel = signOutPopupViewModel;
             _navigation = navigation;
-            _preferencesService = preferencesService;
+            _securityService = securityService;
+            _localAuthPreferencesService = preferencesService;
         }
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
-            return new Window(new AppShell(_authService, _signOutPopupViewModel, _navigation, _preferencesService));
+            return new Window(new AppShell(_authService, _signOutPopupViewModel, _navigation, _securityService, _localAuthPreferencesService));
         }
     }
 }

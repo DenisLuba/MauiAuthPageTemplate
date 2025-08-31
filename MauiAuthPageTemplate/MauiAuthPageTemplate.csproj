@@ -209,6 +209,12 @@
 	  <MauiXaml Update="Controls\InputField.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Controls\PatternLockView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Controls\PinCodeLockView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Dialogs\LocalAuthDialog.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

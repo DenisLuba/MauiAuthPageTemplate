@@ -61,6 +61,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<AuthService>();
         builder.Services.AddSingleton<INavigationService, NavigationService>();
         builder.Services.AddSingleton<LocalAuthPreferencesService>();
+        builder.Services.AddSingleton<SecurityService>();
 
         builder.Services.AddSingleton<AuthPageViewModel>();
         builder.Services.AddSingleton<SignUpPopupViewModel>();
