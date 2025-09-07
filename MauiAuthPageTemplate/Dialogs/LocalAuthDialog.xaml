@@ -3,9 +3,37 @@
              xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:MauiAuthPageTemplate.Controls"
+             xmlns:selectors="clr-namespace:MauiAuthPageTemplate.Selectors"
+             xmlns:view_modles="clr-namespace:MauiAuthPageTemplate.ViewModels"
+             x:DataType="view_modles:LocalAuthDialogViewModel"
              BackgroundColor="Transparent">
 
-	<controls:DialogContainer CloseDialogCommand="{Binding CloseDialog}">
+	<ContentPage.Resources>
+		<ResourceDictionary>
+			<!--  Шаблон для PatternLock  -->
+			<DataTemplate x:Key="PATTERN_TEMPLATE">
+				<controls:PatternLockView HeightRequest="400"
+				                          HorizontalOptions="Center"
+				                          VerticalOptions="Center"
+				                          WidthRequest="400" />
+			</DataTemplate>
+
+			<!--  Шаблон для PinCodeLock  -->
+			<DataTemplate x:Key="PIN_CODE_TEMPLATE">
+				<controls:PinCodeLockView HeightRequest="400"
+				                          HorizontalOptions="Center"
+				                          VerticalOptions="Center"
+				                          WidthRequest="400" />
+			</DataTemplate>
+
+			<!--  Селектор для выбора контента Pin или Pattern  -->
+			<selectors:AuthTemplateSelector x:Key="AuthSelector"
+			                                PatternTemplate="{StaticResource PATTERN_TEMPLATE}"
+			                                PinTemplate="{StaticResource PIN_CODE_TEMPLATE}" />
+		</ResourceDictionary>
+	</ContentPage.Resources>
+
+	<controls:DialogContainer CloseDialogCommand="{Binding CloseCommand}">
 		<Grid HorizontalOptions="Fill"
 		      RowDefinitions="Auto, *"
 		      VerticalOptions="Fill">
@@ -17,19 +45,8 @@
 			       VerticalOptions="Center"
 			       WidthRequest="30" />
 
-			<controls:PatternLockView x:Name="PatternView"
-			                          Grid.Row="1"
-			                          HeightRequest="400"
-			                          HorizontalOptions="Center"
-			                          VerticalOptions="Center"
-			                          WidthRequest="400" />
-			
-			<controls:PinCodeLockView x:Name="PinCodeView"
-									  Grid.Row="1"
-									  HeightRequest="400"
-									  HorizontalOptions="Center"
-									  VerticalOptions="Center"
-									  WidthRequest="400" />
+			<ContentView x:Name="AuthContentView"
+			             Grid.Row="1" />
 		</Grid>
 	</controls:DialogContainer>
 

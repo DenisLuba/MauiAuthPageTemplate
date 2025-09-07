@@ -69,6 +69,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<LoginWithPhoneViewModel>();
         builder.Services.AddSingleton<SignOutPopupViewModel>();
         builder.Services.AddSingleton<SelectEnterMethodPopupViewModel>();
+        builder.Services.AddTransient<LocalAuthDialogViewModel>();
 
         return builder;
     }

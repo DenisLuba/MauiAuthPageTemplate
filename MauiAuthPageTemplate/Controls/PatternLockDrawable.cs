@@ -3,7 +3,7 @@
 public class PatternLockDrawable : IDrawable
 {
     #region Private Values
-    private const float CircleRadius = 25; // Радиус круга для каждой точки
+    private const float CircleRadius = 8; // Радиус круга для каждой точки
     private readonly List<PointF> _gridPoints; // Список точек сетки
     private readonly List<int> _selectedPoints = []; // Список выбранных точек (индексы в _gridPoints)
     private PointF? _currentTouch; // Текущее касание (null, если нет касания)
@@ -90,7 +90,7 @@ public class PatternLockDrawable : IDrawable
         for (int i = 0; i < _gridPoints.Count; i++)
         {
             if (!_selectedPoints.Contains(i) &&                        // если точка ещё не выбрана и
-                Distance(touch, _gridPoints[i]) <= CircleRadius * 1.5) // если касание близко к точке
+                Distance(touch, _gridPoints[i]) <= CircleRadius * 3) // если касание близко к точке
             {
                 _selectedPoints.Add(i); // добавляем точку в выбранные
                 break; // выходим из цикла, чтобы не выбрать несколько точек за одно касание

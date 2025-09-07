@@ -7,25 +7,25 @@ namespace MauiAuthPageTemplate.Pages;
 
 public partial class MainPage : ContentPage
 {
+    LocalAuthDialogViewModel _localAuthDialogViewModel;
     INavigationService _navigationService;
     LocalAuthPreferencesService _preferencesService;
     SelectEnterMethodPopupViewModel _enterMethodPopupViewModel;
-    SecurityService _securityService;
 
     private bool IsShownDialog = false;
 
     public MainPage(
+        LocalAuthDialogViewModel localAuthDialogViewModel,
         INavigationService navigation, 
         LocalAuthPreferencesService preferencesService, 
-        SelectEnterMethodPopupViewModel enterMethodPopupViewModel, 
-        SecurityService securityService)
+        SelectEnterMethodPopupViewModel enterMethodPopupViewModel)
     {
         InitializeComponent();
 
+        _localAuthDialogViewModel = localAuthDialogViewModel;
         _navigationService = navigation;
         _preferencesService = preferencesService;
         _enterMethodPopupViewModel = enterMethodPopupViewModel;
-        _securityService = securityService;
     }
 
     protected override async void OnAppearing()
@@ -42,9 +42,8 @@ public partial class MainPage : ContentPage
         if (!IsShownDialog)
             await _navigationService.PushModalAsync(new SelectEnterMethodPopup(
                 _enterMethodPopupViewModel, 
-                _navigationService, 
-                _preferencesService, 
-                _securityService));
+                _localAuthDialogViewModel,
+                _navigationService));
 
 
         IsShownDialog = true;

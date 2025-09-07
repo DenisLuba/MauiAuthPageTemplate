@@ -55,7 +55,8 @@ public partial class PatternLockView : ContentView
 
         if (_drawable.SelectedPoints.Any()) // Если есть выбранные точки
         {
-            PatternCompleted?.Invoke(this, result); // Вызываем событие с результатом (без хэша кода)
+            PatternCompleted?.Invoke(this, result); // Вызываем событие с результатом 
+            Clear();
         }
     }
     #endregion

@@ -1,46 +1,44 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<ContentView x:Class="MauiAuthPageTemplate.Controls.DialogContainer"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:self="clr-namespace:MauiAuthPageTemplate.Controls"
-             x:DataType="self:DialogContainer"
-             x:Class="MauiAuthPageTemplate.Controls.DialogContainer">
+             x:DataType="self:DialogContainer">
 
-    <ContentView.ControlTemplate>
-        <ControlTemplate>
-            <Grid>
-                <!-- 👇 Затемнённый фон с Tap -->
-                <BoxView
-                    HorizontalOptions="Fill"
-                    VerticalOptions="Fill"
-                    BackgroundColor="{TemplateBinding DialogBackgroundColor}">
-                    <BoxView.GestureRecognizers>
-                        <TapGestureRecognizer Command="{TemplateBinding CloseDialogCommand}" />
-                    </BoxView.GestureRecognizers>
-                </BoxView>
+	<ContentView.ControlTemplate>
+		<ControlTemplate>
+			<Grid>
+				<!--  👇 Затемнённый фон с Tap  -->
+				<BoxView BackgroundColor="{TemplateBinding DialogBackgroundColor}"
+				         HorizontalOptions="Fill"
+				         VerticalOptions="Fill">
+					<BoxView.GestureRecognizers>
+						<TapGestureRecognizer Command="{TemplateBinding CloseDialogCommand}" />
+					</BoxView.GestureRecognizers>
+				</BoxView>
 
-                <!-- 👇 Карточка диалога -->
-                <Border
-                    BackgroundColor="{TemplateBinding DialogBoxColor}"
-                    Padding="{TemplateBinding DialogPadding}"
-                    Margin="{TemplateBinding DialogMargin}"
-                    HorizontalOptions="{TemplateBinding DialogHorizontalOptions}"
-                    VerticalOptions="{TemplateBinding DialogVerticalOptions}">
-                    
-                    <!-- Радиус скругления углов диалога -->
-                    <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="{TemplateBinding DialogCornerRadius}" />
-                    </Border.StrokeShape>
-                    
-                    <!-- Гасим тапы внутри карточки, чтобы не кликался фон -->
-                    <Border.GestureRecognizers>
-                        <TapGestureRecognizer Command="{TemplateBinding DummyCommand}" />
-                    </Border.GestureRecognizers>
+				<!--  👇 Карточка диалога  -->
+				<Border Margin="{TemplateBinding DialogMargin}"
+				        Padding="{TemplateBinding DialogPadding}"
+				        BackgroundColor="{TemplateBinding DialogBoxColor}"
+				        HorizontalOptions="{TemplateBinding DialogHorizontalOptions}"
+				        VerticalOptions="{TemplateBinding DialogVerticalOptions}">
 
-                    <!-- Внутрь кладем пользовательский контент -->
-                    <ContentPresenter />
-                </Border>
-            </Grid>
-        </ControlTemplate>
-    </ContentView.ControlTemplate>
+					<!--  Радиус скругления углов диалога  -->
+					<Border.StrokeShape>
+						<RoundRectangle CornerRadius="{TemplateBinding DialogCornerRadius}" />
+					</Border.StrokeShape>
+
+					<!--  Гасим тапы внутри карточки, чтобы не кликался фон  -->
+					<Border.GestureRecognizers>
+						<TapGestureRecognizer Command="{TemplateBinding DummyCommand}" />
+					</Border.GestureRecognizers>
+
+					<!--  Внутрь кладем пользовательский контент  -->
+					<ContentPresenter />
+				</Border>
+			</Grid>
+		</ControlTemplate>
+	</ContentView.ControlTemplate>
 
 </ContentView>

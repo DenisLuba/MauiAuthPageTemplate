@@ -7,15 +7,14 @@ namespace MauiAuthPageTemplate.Dialogs;
 public partial class SelectEnterMethodPopup : ContentPage
 {
 	public SelectEnterMethodPopup(
-		SelectEnterMethodPopupViewModel viewModel, 
-		INavigationService navigation,
-		LocalAuthPreferencesService preferencesService,
-		SecurityService securityService)
+		SelectEnterMethodPopupViewModel selectViewModel, 
+		LocalAuthDialogViewModel localAuthViewModel,
+        INavigationService navigation)
 	{
 		InitializeComponent();
-		BindingContext = viewModel;
+		BindingContext = selectViewModel;
 
-		viewModel.LoginMethodSelected += async (_, _) => await navigation.PopModalAsync();
-		viewModel.LoginMethodSelected += async (_, _) => await navigation.PushModalAsync(new LocalAuthDialog(preferencesService, securityService, navigation));
+		selectViewModel.LoginMethodSelected += async (_, _) => await navigation.PopModalAsync();
+		selectViewModel.LoginMethodSelected += async (_, _) => await navigation.PushModalAsync(new LocalAuthDialog(localAuthViewModel));
     }
 }

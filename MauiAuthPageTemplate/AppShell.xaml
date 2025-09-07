@@ -1,45 +1,43 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Shell
-    x:Class="MauiAuthPageTemplate.AppShell"
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:pages="clr-namespace:MauiAuthPageTemplate.Pages"
-    xmlns:strings="clr-namespace:MauiAuthPageTemplate.Resources.Strings.AppShellResources"
-    Title="MauiAuthPageTemplate">
+<Shell x:Class="MauiAuthPageTemplate.AppShell"
+       xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:pages="clr-namespace:MauiAuthPageTemplate.Pages"
+       xmlns:strings="clr-namespace:MauiAuthPageTemplate.Resources.Strings.AppShellResources"
+       Title="MauiAuthPageTemplate">
 
-    <!-- 🔑 AuthPage (не добавляем во Flyout) -->
-    <ShellContent Route="AuthPage"
-                  ContentTemplate="{DataTemplate pages:AuthPage}"
-                  Shell.FlyoutBehavior="Disabled" />
+	<!--  🔑 AuthPage (не добавляем во Flyout)  -->
+	<ShellContent ContentTemplate="{DataTemplate pages:AuthPage}"
+	              Route="AuthPage"
+	              Shell.FlyoutBehavior="Disabled" />
 
-    <!-- 🎩 Добавляем FlyoutHeader -->
-    <!--<Shell.FlyoutHeader>
+	<!--  🎩 Добавляем FlyoutHeader  -->
+	<!--<Shell.FlyoutHeader>
         <Grid BackgroundColor="#eeeeee" Padding="20">
             <Image Source="flyout_header.png" HeightRequest="100" WidthRequest="100" HorizontalOptions="Center" />
         </Grid>
     </Shell.FlyoutHeader>-->
 
-    <FlyoutItem>
-        <ShellContent 
-            Route="MainPage" 
-            ContentTemplate="{DataTemplate pages:MainPage}" 
-            Shell.FlyoutBehavior="Flyout" />
-    </FlyoutItem>
+	<FlyoutItem>
+		<ShellContent ContentTemplate="{DataTemplate pages:MainPage}"
+		              Route="MainPage"
+		              Shell.FlyoutBehavior="Flyout" />
+	</FlyoutItem>
 
-    <!-- Добавляем другие страницы во Flyout -->
-        <!--<FlyoutItem Title="New Flyout" Icon="new_flyout_icon">
-        <ShellContent 
-            Route="NewFlyoutPage" 
-            ContentTemplate="{DataTemplate pages:NewFlyoutPage}" 
-            Shell.FlyoutBehavior="Flyout" /> -->
+	<!--  Добавляем другие страницы во Flyout  -->
+	<!--<FlyoutItem Title="New Flyout" Icon="new_flyout_icon">
+        <ShellContent
+            Route="NewFlyoutPage"
+            ContentTemplate="{DataTemplate pages:NewFlyoutPage}"
+            Shell.FlyoutBehavior="Flyout" />-->
 
-    <!-- Добавляем MenuItem для вызова команд -->
-    <MenuItem Text="{x:Static strings:ResourcesAppShell.sign_out}"
-              IconImageSource="sign_out_logo.png"
-              Clicked="ShowSignOutDialog"/>
+	<!--  Добавляем MenuItem для вызова команд  -->
+	<MenuItem Clicked="ShowSignOutDialog"
+	          IconImageSource="sign_out_logo.png"
+	          Text="{x:Static strings:ResourcesAppShell.sign_out}" />
 
-    <!-- 👢 Добавляем FlyoutFooter -->
-    <!--<Shell.FlyoutFooter>
+	<!--  👢 Добавляем FlyoutFooter  -->
+	<!--<Shell.FlyoutFooter>
         <ContentView Padding="10">
             <Label
                 Text="© 2025 MyApplication"

@@ -1,99 +1,62 @@
-using MauiAuthPageTemplate.Services;
-using MauiAuthPageTemplate.Services.Interfaces;
+using MauiAuthPageTemplate.ViewModels;
+using MauiAuthPageTemplate.Controls;
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace MauiAuthPageTemplate.Dialogs;
 
 public partial class LocalAuthDialog : ContentPage
 {
-    private readonly LocalAuthPreferencesService _authPreferencesService;
-    private readonly SecurityService _securityService;
-    private readonly INavigationService _navigationService;
-    private bool _isInitialized;
-    private const string PATTERN_HASH_KEY = "HASH KEY";
-    private const string PIN_CODE_HASH_KEY = "PIN CODE HASH KEY";
+    private readonly LocalAuthDialogViewModel _viewModel;   
 
-    public bool IsPattern { get; set; }
-    public bool IsPinCode { get; set; }
-
-    public LocalAuthDialog(
-        LocalAuthPreferencesService authPreferencesService,
-        SecurityService securityService,
-        INavigationService navigationService)
+    public LocalAuthDialog(LocalAuthDialogViewModel viewModel)
     {
         InitializeComponent();
 
-        _authPreferencesService = authPreferencesService;
-        _securityService = securityService;
-        _navigationService = navigationService;
+        _viewModel = viewModel;
+        BindingContext = _viewModel;
     }
 
     protected override async void OnAppearing()
     {
         base.OnAppearing();
 
-        _isInitialized = true;
+        await _viewModel.InitializeAsync();
 
-        var methods = await _authPreferencesService.GetAuthMethodAsync();
-
-        var isPattern = methods.HasFlag(LocalAuthMethod.Pattern);
-        var isPinCode = methods.HasFlag(LocalAuthMethod.PinCode);
-
-        if (isPattern)
+        if (Resources["AuthSelector"] is Selectors.AuthTemplateSelector selector)
         {
-            IsPattern = true;
-            PatternView.IsVisible = true;
-            PatternView.IsEnabled = true;
-            PinCodeView.IsVisible = false;
-            PinCodeView.IsEnabled = false;
-            PatternView.Clear();
+            try
+            {
+                var template = selector.SelectTemplate(item: _viewModel, container: this);
+                // Вставляем выбранный шаблон в ContentView
+                var view = template?.CreateContent() as View ?? throw new NullReferenceException("");
+                AuthContentView.Content = view;
+
+                // Подписываемся на событие завершения ввода узора, если выбран шаблон узора
+                if (view is PatternLockView patternView)
+                {
+                    patternView.PatternCompleted += OnPatternCompleted;
+                }
+                // или на событие завершения ввода PIN-кода, если выбран шаблон PIN-кода
+                else if (view is PinCodeLockView pinCodeView)
+                {
+                    pinCodeView.PinCodeCompleted += OnPinCompleted;
+                }
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine($"LocalAuthDialog - OnAppearing: {e.Message}");
+            }
         }
-        else if (isPinCode)
-        {
-            IsPinCode = true;
-            PinCodeView.IsVisible = true;
-            PinCodeView.IsEnabled = true;
-            PatternView.IsVisible = false;
-            PatternView.IsEnabled = false;
-            PinCodeView.Clear();
-        }
+    }
 
-        PatternView.PatternCompleted += async (_, pattern) =>
-        {
-            if (!_isInitialized) return;
+    private async void OnPinCompleted(object? sender, string pinCode)
+    {
+        await _viewModel.HandlePinInputAsync(pinCode);
+    }
 
-            var hash = _securityService.ComputeHash(pattern);
-            var isValid = await _securityService.CheckHash(PATTERN_HASH_KEY, hash);
-
-            if (isValid)
-            {
-                // Close the dialog
-                await _navigationService.PopModalAsync(true);
-            }
-            else
-            {
-                // Show error message
-                await DisplayAlert("Error", "Invalid Pattern. Please try again.", "OK");
-                PatternView.Clear();
-            }
-        };
-
-        PinCodeView.PinCodeCompleted += async (_, pin) =>
-        {
-            if (!_isInitialized) return;
-
-            var hash = _securityService.ComputeHash(pin);
-            var isValid = await _securityService.CheckHash(PIN_CODE_HASH_KEY, hash);
-            if (isValid)
-            {
-                // Close the dialog
-                await _navigationService.PopModalAsync(true);
-            }
-            else
-            {
-                // Show error message
-                await DisplayAlert("Error", "Invalid PIN Code. Please try again.", "OK");
-                PinCodeView.Clear();
-            }
-        };
+    private async void OnPatternCompleted(object? sender, string pattern)
+    {
+        await _viewModel.HandlePatternInputAsync(pattern);
     }
 }

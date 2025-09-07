@@ -60,9 +60,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Maui" Version="12.2.0" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
 		<PackageReference Include="FirebaseAuthentication.net" Version="4.1.0" />
-		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.100" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" />
 	</ItemGroup>
 
@@ -90,6 +91,16 @@
 	    <DesignTime>True</DesignTime>
 	    <AutoGen>True</AutoGen>
 	    <DependentUpon>ResourcesAuthService.resx</DependentUpon>
+	  </Compile>
+	  <Compile Update="Resources\Strings\LocalAuthDialogViewModelResources\Resource1.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>Resource1.resx</DependentUpon>
+	  </Compile>
+	  <Compile Update="Resources\Strings\LocalAuthDialogViewModelResources\ResourcesLocalAuthDialogViewModel.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>ResourcesLocalAuthDialogViewModel.resx</DependentUpon>
 	  </Compile>
 	  <Compile Update="Resources\Strings\LoginWithPhonePopupResources\ResourcesLoginWithPhonePopup.Designer.cs">
 	    <DesignTime>True</DesignTime>
@@ -159,6 +170,14 @@
 	  <EmbeddedResource Update="Resources\Strings\AuthServiceResources\ResourcesAuthService.resx">
 	    <Generator>PublicResXFileCodeGenerator</Generator>
 	    <LastGenOutput>ResourcesAuthService.Designer.cs</LastGenOutput>
+	  </EmbeddedResource>
+	  <EmbeddedResource Update="Resources\Strings\LocalAuthDialogViewModelResources\Resource1.resx">
+	    <Generator>ResXFileCodeGenerator</Generator>
+	    <LastGenOutput>Resource1.Designer.cs</LastGenOutput>
+	  </EmbeddedResource>
+	  <EmbeddedResource Update="Resources\Strings\LocalAuthDialogViewModelResources\ResourcesLocalAuthDialogViewModel.resx">
+	    <Generator>PublicResXFileCodeGenerator</Generator>
+	    <LastGenOutput>ResourcesLocalAuthDialogViewModel.Designer.cs</LastGenOutput>
 	  </EmbeddedResource>
 	  <EmbeddedResource Update="Resources\Strings\LoginWithPhonePopupResources\ResourcesLoginWithPhonePopup.resx">
 	    <Generator>PublicResXFileCodeGenerator</Generator>

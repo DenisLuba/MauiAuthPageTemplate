@@ -3,9 +3,9 @@
              xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:converter="clr-namespace:MauiAuthPageTemplate.Converters"
-			 xmlns:local="clr-namespace:MauiAuthPageTemplate.Controls"
-			 x:DataType="local:PinCodeLockView"
-             x:Name="Root">
+             xmlns:local="clr-namespace:MauiAuthPageTemplate.Controls"
+             x:Name="Root"
+             x:DataType="local:PinCodeLockView">
 
 	<ContentView.Resources>
 		<ResourceDictionary>
@@ -22,7 +22,7 @@
 			<Setter Property="WidthRequest" Value="12" />
 			<Setter Property="Margin" Value="4" />
 		</Style>
-		
+
 		<Style TargetType="Button">
 			<Setter Property="WidthRequest" Value="72" />
 			<Setter Property="HeightRequest" Value="72" />
@@ -33,32 +33,32 @@
 			<Setter Property="VisualStateManager.VisualStateGroups">
 				<VisualStateGroupList>
 					<VisualStateGroup Name="CommonStates">
-						
+
 						<VisualState Name="Normal">
 							<VisualState.Setters>
 								<Setter Property="BackgroundColor" Value="Transparent" />
 							</VisualState.Setters>
 						</VisualState>
-						
+
 						<VisualState Name="Pressed">
 							<VisualState.Setters>
 								<Setter Property="BackgroundColor" Value="#22000000" />
 								<Setter Property="Shadow">
 									<Shadow Brush="Black"
-											Offset="2,2"
-											Radius="6"
-											Opacity="0.3" />
+									        Opacity="0.3"
+									        Radius="6"
+									        Offset="2,2" />
 								</Setter>
 							</VisualState.Setters>
 						</VisualState>
-						
+
 					</VisualStateGroup>
 				</VisualStateGroupList>
 			</Setter>
 		</Style>
 	</ContentView.Resources>
 
-	<!-- Строка визуализации ПИН-кода -->
+	<!--  Строка визуализации ПИН-кода  -->
 	<VerticalStackLayout Padding="8"
 	                     HorizontalOptions="Center"
 	                     Spacing="12"
@@ -74,37 +74,84 @@
 			      ColumnSpacing="12"
 			      HorizontalOptions="Center"
 			      VerticalOptions="Center">
-				<Ellipse Grid.Column="0" Fill="{Binding Source={x:Reference Root}, Path=PinCode, Converter={StaticResource pinCircleFillConverter}, ConverterParameter=1}" />
-				<Ellipse Grid.Column="1" Fill="{Binding Source={x:Reference Root}, Path=PinCode, Converter={StaticResource pinCircleFillConverter}, ConverterParameter=2}" />
-				<Ellipse Grid.Column="2" Fill="{Binding Source={x:Reference Root}, Path=PinCode, Converter={StaticResource pinCircleFillConverter}, ConverterParameter=3}" />
-				<Ellipse Grid.Column="3" Fill="{Binding Source={x:Reference Root}, Path=PinCode, Converter={StaticResource pinCircleFillConverter}, ConverterParameter=4}" />
+				<Ellipse Grid.Column="0"
+				         Fill="{Binding Source={x:Reference Root}, Path=PinCode, Converter={StaticResource pinCircleFillConverter}, ConverterParameter=1}" />
+				<Ellipse Grid.Column="1"
+				         Fill="{Binding Source={x:Reference Root}, Path=PinCode, Converter={StaticResource pinCircleFillConverter}, ConverterParameter=2}" />
+				<Ellipse Grid.Column="2"
+				         Fill="{Binding Source={x:Reference Root}, Path=PinCode, Converter={StaticResource pinCircleFillConverter}, ConverterParameter=3}" />
+				<Ellipse Grid.Column="3"
+				         Fill="{Binding Source={x:Reference Root}, Path=PinCode, Converter={StaticResource pinCircleFillConverter}, ConverterParameter=4}" />
 			</Grid>
 		</Border>
 
 		<!--  Кнопки  -->
 		<Grid ColumnDefinitions="Auto, Auto, Auto"
-		      RowDefinitions="Auto, Auto, Auto, Auto"
 		      ColumnSpacing="8"
+		      RowDefinitions="Auto, Auto, Auto, Auto"
 		      RowSpacing="8">
-			
-			<!-- Row 0 -->
-			<Button Text="1" Grid.Row="0" Grid.Column="0" Command="{Binding Source={x:Reference Root}, Path=AddDigitCommand}" CommandParameter="1" />
-			<Button Text="2" Grid.Row="0" Grid.Column="1" Command="{Binding Source={x:Reference Root}, Path=AddDigitCommand}" CommandParameter="2" />
-			<Button Text="3" Grid.Row="0" Grid.Column="2" Command="{Binding Source={x:Reference Root}, Path=AddDigitCommand}" CommandParameter="3" />
 
-			<!-- Row 1 -->
-			<Button Text="4" Grid.Row="1" Grid.Column="0" Command="{Binding Source={x:Reference Root}, Path=AddDigitCommand}" CommandParameter="4" />
-			<Button Text="5" Grid.Row="1" Grid.Column="1" Command="{Binding Source={x:Reference Root}, Path=AddDigitCommand}" CommandParameter="5" />
-			<Button Text="6" Grid.Row="1" Grid.Column="2" Command="{Binding Source={x:Reference Root}, Path=AddDigitCommand}" CommandParameter="6" />
+			<!--  Row 0  -->
+			<Button Grid.Row="0"
+			        Grid.Column="0"
+			        Command="{Binding Source={x:Reference Root}, Path=AddDigitCommand}"
+			        CommandParameter="1"
+			        Text="1" />
+			<Button Grid.Row="0"
+			        Grid.Column="1"
+			        Command="{Binding Source={x:Reference Root}, Path=AddDigitCommand}"
+			        CommandParameter="2"
+			        Text="2" />
+			<Button Grid.Row="0"
+			        Grid.Column="2"
+			        Command="{Binding Source={x:Reference Root}, Path=AddDigitCommand}"
+			        CommandParameter="3"
+			        Text="3" />
 
-			<!-- Row 2 -->
-			<Button Text="7" Grid.Row="2" Grid.Column="0" Command="{Binding Source={x:Reference Root}, Path=AddDigitCommand}" CommandParameter="7" />
-			<Button Text="8" Grid.Row="2" Grid.Column="1" Command="{Binding Source={x:Reference Root}, Path=AddDigitCommand}" CommandParameter="8" />
-			<Button Text="9" Grid.Row="2" Grid.Column="2" Command="{Binding Source={x:Reference Root}, Path=AddDigitCommand}" CommandParameter="9" />
+			<!--  Row 1  -->
+			<Button Grid.Row="1"
+			        Grid.Column="0"
+			        Command="{Binding Source={x:Reference Root}, Path=AddDigitCommand}"
+			        CommandParameter="4"
+			        Text="4" />
+			<Button Grid.Row="1"
+			        Grid.Column="1"
+			        Command="{Binding Source={x:Reference Root}, Path=AddDigitCommand}"
+			        CommandParameter="5"
+			        Text="5" />
+			<Button Grid.Row="1"
+			        Grid.Column="2"
+			        Command="{Binding Source={x:Reference Root}, Path=AddDigitCommand}"
+			        CommandParameter="6"
+			        Text="6" />
 
-			<!-- Row 3 -->
-			<Button Text="⌫" Grid.Row="3" Grid.Column="0" Command="{Binding Source={x:Reference Root}, Path=RemoveDigitCommand}" />
-			<Button Text="0" Grid.Row="3" Grid.Column="1" Command="{Binding Source={x:Reference Root}, Path=AddDigitCommand}" CommandParameter="0" />
+			<!--  Row 2  -->
+			<Button Grid.Row="2"
+			        Grid.Column="0"
+			        Command="{Binding Source={x:Reference Root}, Path=AddDigitCommand}"
+			        CommandParameter="7"
+			        Text="7" />
+			<Button Grid.Row="2"
+			        Grid.Column="1"
+			        Command="{Binding Source={x:Reference Root}, Path=AddDigitCommand}"
+			        CommandParameter="8"
+			        Text="8" />
+			<Button Grid.Row="2"
+			        Grid.Column="2"
+			        Command="{Binding Source={x:Reference Root}, Path=AddDigitCommand}"
+			        CommandParameter="9"
+			        Text="9" />
+
+			<!--  Row 3  -->
+			<Button Grid.Row="3"
+			        Grid.Column="0"
+			        Command="{Binding Source={x:Reference Root}, Path=RemoveDigitCommand}"
+			        Text="⌫" />
+			<Button Grid.Row="3"
+			        Grid.Column="1"
+			        Command="{Binding Source={x:Reference Root}, Path=AddDigitCommand}"
+			        CommandParameter="0"
+			        Text="0" />
 		</Grid>
 	</VerticalStackLayout>
 </ContentView>

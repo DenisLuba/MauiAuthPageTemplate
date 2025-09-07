@@ -66,9 +66,11 @@ public partial class PinCodeLockView : ContentView
         }
         if (PinCode.Length == 4)
         {
+            var completedPin = PinCode;
+
             PinCode = string.Empty;
 
-            PinCodeCompleted?.Invoke(this, PinCode);
+            PinCodeCompleted?.Invoke(this, completedPin);
         }
     }
     #endregion

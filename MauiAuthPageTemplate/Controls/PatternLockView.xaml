@@ -6,10 +6,10 @@
 	<Grid>
 		<!--  Канвас для рисования  -->
 		<GraphicsView x:Name="Canvas"
+		              BackgroundColor="White"
 		              HeightRequest="300"
-		              WidthRequest="300"
-					  BackgroundColor="White"
 		              HorizontalOptions="Center"
-		              VerticalOptions="Center" />
+		              VerticalOptions="Center"
+		              WidthRequest="300" />
 	</Grid>
 </ContentView>
