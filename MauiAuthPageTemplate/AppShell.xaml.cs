@@ -1,6 +1,6 @@
 ﻿using MauiAuthPageTemplate.Dialogs;
-using MauiAuthPageTemplate.Services.Interfaces;
 using MauiAuthPageTemplate.ViewModels;
+using MauiShared.Services;
 
 namespace MauiAuthPageTemplate;
 

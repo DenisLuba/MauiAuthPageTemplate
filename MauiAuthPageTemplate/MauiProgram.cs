@@ -1,8 +1,9 @@
 ﻿using AuthenticationMaui.Services;
 using CommunityToolkit.Maui;
 using MauiAuthPageTemplate.Services;
-using MauiAuthPageTemplate.Services.Interfaces;
 using MauiAuthPageTemplate.ViewModels;
+using MauiLocalAuth.ViewModels;
+using MauiShared.Services;
 using Microsoft.Extensions.Logging;
 
 namespace MauiAuthPageTemplate;
@@ -69,7 +70,14 @@ public static class MauiProgram
         builder.Services.AddSingleton<LoginWithPhoneViewModel>();
         builder.Services.AddSingleton<SignOutPopupViewModel>();
         builder.Services.AddSingleton<SelectEnterMethodPopupViewModel>();
-        builder.Services.AddTransient<LocalAuthDialogViewModel>();
+        builder.Services.AddSingleton<LocalAuthDialogViewModel>(provider =>
+        {
+            return new LocalAuthDialogViewModel(
+                provider.GetRequiredService<LocalAuthPreferencesService>(),
+                provider.GetRequiredService<SecurityService>(),
+                provider.GetRequiredService<INavigationService>(),
+                GlobalValues.AuthPage);
+        });
 
         return builder;
     }

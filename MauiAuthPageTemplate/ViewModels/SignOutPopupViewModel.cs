@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using MauiAuthPageTemplate.Resources.Strings.SignOutPopupViewModelResources;
 using MauiAuthPageTemplate.Services;
+using MauiShared.Services;
 
 namespace MauiAuthPageTemplate.ViewModels;
 

@@ -69,6 +69,8 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\..\AuthenticationMAUI\AuthenticationMAUI\AuthenticationMAUI.csproj" />
+	  <ProjectReference Include="..\..\MauiLocalAuth\MauiLocalAuth.csproj" />
+	  <ProjectReference Include="..\..\MauiShared\MauiShared.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -91,16 +93,6 @@
 	    <DesignTime>True</DesignTime>
 	    <AutoGen>True</AutoGen>
 	    <DependentUpon>ResourcesAuthService.resx</DependentUpon>
-	  </Compile>
-	  <Compile Update="Resources\Strings\LocalAuthDialogViewModelResources\Resource1.Designer.cs">
-	    <DesignTime>True</DesignTime>
-	    <AutoGen>True</AutoGen>
-	    <DependentUpon>Resource1.resx</DependentUpon>
-	  </Compile>
-	  <Compile Update="Resources\Strings\LocalAuthDialogViewModelResources\ResourcesLocalAuthDialogViewModel.Designer.cs">
-	    <DesignTime>True</DesignTime>
-	    <AutoGen>True</AutoGen>
-	    <DependentUpon>ResourcesLocalAuthDialogViewModel.resx</DependentUpon>
 	  </Compile>
 	  <Compile Update="Resources\Strings\LoginWithPhonePopupResources\ResourcesLoginWithPhonePopup.Designer.cs">
 	    <DesignTime>True</DesignTime>
@@ -126,11 +118,6 @@
 	    <DesignTime>True</DesignTime>
 	    <AutoGen>True</AutoGen>
 	    <DependentUpon>ResourcesResetPasswordPopupViewModel.resx</DependentUpon>
-	  </Compile>
-	  <Compile Update="Resources\Strings\SelectEnterMethodPopupResources\ResourcesSelectEnterMethodPopup.Designer.cs">
-	    <DesignTime>True</DesignTime>
-	    <AutoGen>True</AutoGen>
-	    <DependentUpon>ResourcesSelectEnterMethodPopup.resx</DependentUpon>
 	  </Compile>
 	  <Compile Update="Resources\Strings\SignOutPopupResources\ResourcesSignOutPopup.Designer.cs">
 	    <DesignTime>True</DesignTime>
@@ -171,14 +158,6 @@
 	    <Generator>PublicResXFileCodeGenerator</Generator>
 	    <LastGenOutput>ResourcesAuthService.Designer.cs</LastGenOutput>
 	  </EmbeddedResource>
-	  <EmbeddedResource Update="Resources\Strings\LocalAuthDialogViewModelResources\Resource1.resx">
-	    <Generator>ResXFileCodeGenerator</Generator>
-	    <LastGenOutput>Resource1.Designer.cs</LastGenOutput>
-	  </EmbeddedResource>
-	  <EmbeddedResource Update="Resources\Strings\LocalAuthDialogViewModelResources\ResourcesLocalAuthDialogViewModel.resx">
-	    <Generator>PublicResXFileCodeGenerator</Generator>
-	    <LastGenOutput>ResourcesLocalAuthDialogViewModel.Designer.cs</LastGenOutput>
-	  </EmbeddedResource>
 	  <EmbeddedResource Update="Resources\Strings\LoginWithPhonePopupResources\ResourcesLoginWithPhonePopup.resx">
 	    <Generator>PublicResXFileCodeGenerator</Generator>
 	    <LastGenOutput>ResourcesLoginWithPhonePopup.Designer.cs</LastGenOutput>
@@ -199,10 +178,6 @@
 	    <Generator>PublicResXFileCodeGenerator</Generator>
 	    <LastGenOutput>ResourcesResetPasswordPopupViewModel.Designer.cs</LastGenOutput>
 	  </EmbeddedResource>
-	  <EmbeddedResource Update="Resources\Strings\SelectEnterMethodPopupResources\ResourcesSelectEnterMethodPopup.resx">
-	    <Generator>PublicResXFileCodeGenerator</Generator>
-	    <LastGenOutput>ResourcesSelectEnterMethodPopup.Designer.cs</LastGenOutput>
-	  </EmbeddedResource>
 	  <EmbeddedResource Update="Resources\Strings\SignOutPopupResources\ResourcesSignOutPopup.resx">
 	    <Generator>PublicResXFileCodeGenerator</Generator>
 	    <LastGenOutput>ResourcesSignOutPopup.Designer.cs</LastGenOutput>
@@ -222,28 +197,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="Controls\DialogContainer.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
 	  <MauiXaml Update="Controls\InputField.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Controls\PatternLockView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Controls\PinCodeLockView.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Dialogs\LocalAuthDialog.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Dialogs\LoginWithPhonePopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Dialogs\ResetPasswordPopup.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Dialogs\SelectEnterMethodPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Dialogs\SignOutPopup.xaml">

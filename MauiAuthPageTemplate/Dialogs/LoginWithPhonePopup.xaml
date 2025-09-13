@@ -3,6 +3,7 @@
              xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:MauiAuthPageTemplate.Controls"
+			 xmlns:shared_controls="clr-namespace:MauiShared.Controls;assembly=MauiShared"
              xmlns:converters="clr-namespace:MauiAuthPageTemplate.Converters"
              xmlns:strings="clr-namespace:MauiAuthPageTemplate.Resources.Strings.LoginWithPhonePopupResources"
              xmlns:view_models="clr-namespace:MauiAuthPageTemplate.ViewModels"
@@ -13,7 +14,7 @@
 		<converters:LoginWithPhonePopupConverter x:Key="LoginWithPhonePopupConverter" />
 	</ContentPage.Resources>
 
-	<controls:DialogContainer CloseDialogCommand="{Binding CloseDialogCommand}">
+	<shared_controls:DialogContainer CloseDialogCommand="{Binding CloseDialogCommand}">
 		<Grid RowDefinitions="Auto, Auto, Auto">
 
 			<Label Grid.Row="0">
@@ -109,5 +110,5 @@
 			                   IsVisible="{Binding Source={x:Static Application.Current}, Path=IsBusy}" />
 		</Grid>
 
-	</controls:DialogContainer>
+	</shared_controls:DialogContainer>
 </ContentPage>

@@ -1,8 +1,11 @@
 ﻿using MauiAuthPageTemplate.Dialogs;
 using MauiAuthPageTemplate.Services;
-using MauiAuthPageTemplate.Services.Interfaces;
 using MauiAuthPageTemplate.ViewModels;
+using MauiLocalAuth.Dialogs;
+using MauiLocalAuth.ViewModels;
+using MauiShared.Services;
 using System.ComponentModel;
+using System.Runtime.Versioning;
 
 namespace MauiAuthPageTemplate
 {
@@ -54,6 +57,7 @@ namespace MauiAuthPageTemplate
             // один из которых должен быть должен быть ПИН-КОД или ПАТТЕРН.
             // Это основной метод входа. Откроется страница с паролем или паттерном.
             // Дополнительно может быть выбран метод входа по отпечатку пальца и/или Face ID.
+
             MainThread.BeginInvokeOnMainThread(async () =>
             {
                 var methods = await _localAuthPreferencesService.GetAuthMethodAsync();

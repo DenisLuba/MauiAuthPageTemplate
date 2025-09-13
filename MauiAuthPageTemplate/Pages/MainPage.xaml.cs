@@ -1,7 +1,6 @@
-﻿using MauiAuthPageTemplate.Services;
-using MauiAuthPageTemplate.Services.Interfaces;
-using MauiAuthPageTemplate.Dialogs;
-using MauiAuthPageTemplate.ViewModels;
+﻿using MauiLocalAuth.ViewModels;
+using MauiShared.Services;
+using MauiLocalAuth.Dialogs;
 
 namespace MauiAuthPageTemplate.Pages;
 

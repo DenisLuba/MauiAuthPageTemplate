@@ -4,7 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using MauiAuthPageTemplate.Resources.Strings.AuthPageViewModelResources;
 using MauiAuthPageTemplate.Dialogs;
 using System.Diagnostics;
-using MauiAuthPageTemplate.Services.Interfaces;
+using MauiShared.Services;
 
 namespace MauiAuthPageTemplate.ViewModels;
 

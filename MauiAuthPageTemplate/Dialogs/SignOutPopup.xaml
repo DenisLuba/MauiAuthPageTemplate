@@ -2,13 +2,13 @@
 <ContentPage x:Class="MauiAuthPageTemplate.Dialogs.SignOutPopup"
              xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:controls="clr-namespace:MauiAuthPageTemplate.Controls"
+			 xmlns:shared_controls="clr-namespace:MauiShared.Controls;assembly=MauiShared"
              xmlns:strings="clr-namespace:MauiAuthPageTemplate.Resources.Strings.SignOutPopupResources"
              xmlns:view_models="clr-namespace:MauiAuthPageTemplate.ViewModels"
              x:DataType="view_models:SignOutPopupViewModel"
              BackgroundColor="Transparent">
 
-	<controls:DialogContainer CloseDialogCommand="{Binding CloseDialogCommand}">
+	<shared_controls:DialogContainer CloseDialogCommand="{Binding CloseDialogCommand}">
 		<VerticalStackLayout Padding="20"
 		                     BackgroundColor="White"
 		                     HorizontalOptions="Center"
@@ -28,6 +28,6 @@
 			</HorizontalStackLayout>
 		</VerticalStackLayout>
 
-	</controls:DialogContainer>
+	</shared_controls:DialogContainer>
 
 </ContentPage>
