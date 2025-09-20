@@ -69,8 +69,9 @@ public static class MauiProgram
         builder.Services.AddSingleton<ResetPasswordPopupViewModel>();
         builder.Services.AddSingleton<LoginWithPhoneViewModel>();
         builder.Services.AddSingleton<SignOutPopupViewModel>();
-        builder.Services.AddSingleton<SelectEnterMethodPopupViewModel>();
-        builder.Services.AddSingleton<LocalAuthDialogViewModel>(provider =>
+
+        builder.Services.AddTransient<SelectEnterMethodPopupViewModel>();
+        builder.Services.AddTransient(provider =>
         {
             return new LocalAuthDialogViewModel(
                 provider.GetRequiredService<LocalAuthPreferencesService>(),

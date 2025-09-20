@@ -74,23 +74,14 @@ public partial class LoginWithPhoneViewModel(AuthService authService)  : Observa
         try
         {
             var result = await authService.LoginWithVerificationCodeAsync(Code);
-            if (result is Result.Success)
+            if (result == Result.Success)
             {
                 CleanEntryEvent?.Invoke(this, true);
-                IsVerificationCodeDialog = false; 
-                await Shell.Current.GoToAsync(GlobalValues.MainPage);
-                CloseDialogEvent?.Invoke(this, true); // Notify that the dialog should close
+                CloseDialogEvent?.Invoke(this, true);
             }
-            else if (result is Result.NoInternetConnection)
-            {
-                await Shell.Current.DisplayAlert(ResourcesLoginWithPhoneViewModel.error, ResourcesLoginWithPhoneViewModel.no_internet_connection, "OK");
-                IsVerificationCodeDialog = false; // We return to the phone number input dialog.
-            }
-            else
-            {
-                await Shell.Current.DisplayAlert(ResourcesLoginWithPhoneViewModel.error, ResourcesLoginWithPhoneViewModel.error_verification_code, "OK");
-                IsVerificationCodeDialog = false; // We return to the phone number input dialog.
-            }
+
+            AuthPageViewModel.OnAuthenticationEvent(result, ResourcesLoginWithPhoneViewModel.error_verification_code);
+            IsVerificationCodeDialog = false;
         }
         catch (Exception)
         {

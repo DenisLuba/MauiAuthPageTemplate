@@ -5,15 +5,12 @@ using MauiAuthPageTemplate.Resources.Strings.AuthPageViewModelResources;
 using MauiAuthPageTemplate.Dialogs;
 using System.Diagnostics;
 using MauiShared.Services;
+using MauiLocalAuth.ViewModels;
+using MauiLocalAuth.Dialogs;
 
 namespace MauiAuthPageTemplate.ViewModels;
 
-public partial class AuthPageViewModel(
-    AuthService authService, 
-    INavigationService navigation, 
-    SignUpPopupViewModel signUpPopupViewModel, 
-    ResetPasswordPopupViewModel resetPasswordPopupViewModel, 
-    LoginWithPhoneViewModel loginWithPhoneViewModel) : ObservableObject
+public partial class AuthPageViewModel : ObservableObject
 {
     #region Properties
     [ObservableProperty]
@@ -23,20 +20,42 @@ public partial class AuthPageViewModel(
     string _password;
     #endregion
 
+    #region Events
+    public static event EventHandler<CompletingAuthEventArgs>? AuthenticationEvent;
+    #endregion
+
+    #region Private Variables
+    private AuthService _authService;
+    private INavigationService _navigation;
+    private SignUpPopupViewModel _signUpPopupViewModel;
+    private ResetPasswordPopupViewModel _resetPasswordPopupViewModel;
+    private LoginWithPhoneViewModel _loginWithPhoneViewModel;
+    #endregion
+
+    public AuthPageViewModel(
+        AuthService authService,
+        INavigationService navigation,
+        SignUpPopupViewModel signUpPopupViewModel,
+        ResetPasswordPopupViewModel resetPasswordPopupViewModel,
+        LoginWithPhoneViewModel loginWithPhoneViewModel)
+    {
+        _authService = authService;
+        _navigation = navigation;
+        _signUpPopupViewModel = signUpPopupViewModel;
+        _resetPasswordPopupViewModel = resetPasswordPopupViewModel;
+        _loginWithPhoneViewModel = loginWithPhoneViewModel;
+
+        AuthenticationEvent += CompletingAuthentication;
+    }
+
     #region SignInCommand
     [RelayCommand]
     public async Task SignInAsync()
     {
         if (!string.IsNullOrWhiteSpace(Login) && !string.IsNullOrWhiteSpace(Password))
         {
-            var isAuthorized = await authService.LoginWithEmailAsync(Login, Password);
-
-            if (isAuthorized is Result.Success)
-                await Shell.Current.GoToAsync(GlobalValues.MainPage);
-            else if (isAuthorized is Result.Failure)
-                await Shell.Current.DisplayAlert(ResourcesAuthPageViewModel.error, ResourcesAuthPageViewModel.invalid_login_or_password, "OK");
-            else if (isAuthorized is Result.NoInternetConnection)
-                await Shell.Current.DisplayAlert(ResourcesAuthPageViewModel.error, ResourcesAuthPageViewModel.no_internet_connection, "OK");
+            var isAuthorized = await _authService.LoginWithEmailAsync(Login, Password);
+            OnAuthenticationEvent(isAuthorized, ResourcesAuthPageViewModel.invalid_login_or_password);
         }
         else
         {
@@ -51,14 +70,24 @@ public partial class AuthPageViewModel(
     {
         try
         {
-            var isAuthorized = await authService.LoginWithGoogleAsync();
+            var isAuthorized = await _authService.LoginWithGoogleAsync();
+            OnAuthenticationEvent(isAuthorized, ResourcesAuthPageViewModel.google_login_error);
+        }
+        catch (Exception ex)
+        {
+            Trace.WriteLine(ex.Message);
+        }
+    }
+    #endregion
 
-            if (isAuthorized is Result.Success)
-                await Shell.Current.GoToAsync(GlobalValues.MainPage);
-            else if (isAuthorized is Result.Failure)
-                await Shell.Current.DisplayAlert(ResourcesAuthPageViewModel.error, ResourcesAuthPageViewModel.google_login_error, "OK");
-            else if (isAuthorized is Result.NoInternetConnection)
-                await Shell.Current.DisplayAlert(ResourcesAuthPageViewModel.error, ResourcesAuthPageViewModel.no_internet_connection, "OK");
+    #region LoginWithFacebookCommand
+    [RelayCommand]
+    public async Task LoginWithFacebookAsync()
+    {
+        try
+        {
+            var isAuthorized = await _authService.LoginWithFacebookAsync();
+            OnAuthenticationEvent(isAuthorized, ResourcesAuthPageViewModel.facebook_login_error);
         }
         catch (Exception ex)
         {
@@ -71,30 +100,8 @@ public partial class AuthPageViewModel(
     [RelayCommand]
     public async Task LoginWithPhoneAsync()
     {
-        var popup = new LoginWithPhonePopup(loginWithPhoneViewModel, navigation);
-        await navigation.PushModalAsync(page: popup, animated: true);
-    }
-    #endregion
-
-    #region LoginWithFacebookCommand
-    [RelayCommand]
-    public async Task LoginWithFacebookAsync()
-    {
-        try
-        {
-            var isAuthorized = await authService.LoginWithFacebookAsync();
-
-            if (isAuthorized is Result.Success)
-                await Shell.Current.GoToAsync(GlobalValues.MainPage);
-            else if (isAuthorized is Result.Failure)
-                await Shell.Current.DisplayAlert(ResourcesAuthPageViewModel.error, ResourcesAuthPageViewModel.facebook_login_error, "OK");
-            else if (isAuthorized is Result.NoInternetConnection)
-                await Shell.Current.DisplayAlert(ResourcesAuthPageViewModel.error, ResourcesAuthPageViewModel.no_internet_connection, "OK");
-        }
-        catch (Exception ex)
-        {
-            Trace.WriteLine(ex.Message);
-        }
+        var popup = new LoginWithPhonePopup(_loginWithPhoneViewModel, _navigation);
+        await _navigation.PushModalAsync(page: popup, animated: true);
     }
     #endregion
 
@@ -102,8 +109,8 @@ public partial class AuthPageViewModel(
     [RelayCommand]
     public async Task SignUpAsync()
     {
-        var popup = new SignUpPopup(signUpPopupViewModel, navigation);
-        await navigation.PushModalAsync(page: popup, animated: true);
+        var popup = new SignUpPopup(_signUpPopupViewModel, _navigation);
+        await _navigation.PushModalAsync(page: popup, animated: true);
     }
     #endregion
 
@@ -111,8 +118,57 @@ public partial class AuthPageViewModel(
     [RelayCommand]
     public async Task ResetPasswordAsync()
     {
-        var popup = new ResetPasswordPopup(resetPasswordPopupViewModel, navigation);
-        await navigation.PushModalAsync(page: popup, animated: true);
+        var popup = new ResetPasswordPopup(_resetPasswordPopupViewModel, _navigation);
+        await _navigation.PushModalAsync(page: popup, animated: true);
     }
     #endregion
+
+    #region OnAuthenticationEvent Method
+    public static void OnAuthenticationEvent(Result result, string failure) =>
+        AuthenticationEvent?.Invoke(null, new(result, failure)); 
+    #endregion
+
+    #region MoveToMainPage Method
+    private async void CompletingAuthentication(object? _, CompletingAuthEventArgs args)
+    {
+        var isAuthorized = args.Result;
+
+        if (isAuthorized is Result.Success)
+        {
+            await Shell.Current.GoToAsync(GlobalValues.MainPage);
+
+            // Если используется ПИН-КОД или ПАТТЕРН
+            if (GlobalValues.USE_PIN_OR_PATTERN)
+            {
+                var serviceProvider = Application.Current?.Handler?.MauiContext?.Services ?? throw new Exception("Service is null");
+
+                var localAuthDialogViewModel = serviceProvider.GetService<LocalAuthDialogViewModel>();
+                var preferencesService = serviceProvider.GetService<LocalAuthPreferencesService>();
+                var enterMethodPopupViewModel = serviceProvider.GetService<SelectEnterMethodPopupViewModel>();
+
+                if (preferencesService is not null &&
+                    enterMethodPopupViewModel is not null &&
+                    _navigation is not null &&
+                    localAuthDialogViewModel is not null)
+                {
+
+                    await _navigation.PushModalAsync(new SelectEnterMethodPopup(
+                        enterMethodPopupViewModel,
+                        localAuthDialogViewModel,
+                        _navigation));
+                }
+            }
+        }
+        else if (isAuthorized is Result.Failure)
+            await Shell.Current.DisplayAlert(ResourcesAuthPageViewModel.error, args.Failure, "OK");
+        else if (isAuthorized is Result.NoInternetConnection)
+            await Shell.Current.DisplayAlert(ResourcesAuthPageViewModel.error, ResourcesAuthPageViewModel.no_internet_connection, "OK");
+    }
+    #endregion
+}
+
+public class CompletingAuthEventArgs(Result result, string? failure) : EventArgs
+{
+    public Result Result { get; } = result;
+    public string? Failure { get; } = failure;
 }

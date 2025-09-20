@@ -23,6 +23,8 @@ internal static class GlobalValues
     internal const string FACEBOOK_APP_SECRET = "45c672bde61b88e7dc533e09de577c7b"; // Ваш Facebook App Secret (Facebook for Developers > My Apps > [Your App] > Settings > Basic > App Secret)
 
 
+    internal const bool USE_PIN_OR_PATTERN = true; // Использовать биометрию (отпечаток пальца, распознавание лица) и ПИН-код или графический узор для аутентификации
+
 
     internal const string MainPage = "//MainPage";
     internal const string AuthPage = "//AuthPage";

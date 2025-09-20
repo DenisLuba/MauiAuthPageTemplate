@@ -50,34 +50,38 @@ namespace MauiAuthPageTemplate
                 _signOutPopupViewModel,
                 _navigation);
 
-            // Если пользователь уже аутентифицирован,
-            // переходим на страницу с методом входа, который был выбран.
-            // Иначе - на AuthPage.
-            // Пользователь может выбрать только сочетание методов входа,
-            // один из которых должен быть должен быть ПИН-КОД или ПАТТЕРН.
-            // Это основной метод входа. Откроется страница с паролем или паттерном.
-            // Дополнительно может быть выбран метод входа по отпечатку пальца и/или Face ID.
-
-            MainThread.BeginInvokeOnMainThread(async () =>
+            // Если используется ПИН-КОД или ПАТТЕРН
+            if (GlobalValues.USE_PIN_OR_PATTERN)
             {
-                var methods = await _localAuthPreferencesService.GetAuthMethodAsync();
-
-                // Если нет уже выбраных методов входа, значит пользователь открыл приложение в первый раз,
-                // тогда переходим на страницу аутентификации
-                if (methods == LocalAuthMethod.None)
+                // Если пользователь уже аутентифицирован,
+                // переходим на страницу с методом входа, который был выбран.
+                // Иначе - на AuthPage.
+                // Пользователь может выбрать только сочетание методов входа,
+                // один из которых должен быть должен быть ПИН-КОД или ПАТТЕРН.
+                // Это основной метод входа. Откроется страница с паролем или паттерном.
+                // Дополнительно может быть выбран метод входа по отпечатку пальца и/или Face ID.
+                MainThread.BeginInvokeOnMainThread(async () =>
                 {
-                    await shell.GoToAsync(GlobalValues.AuthPage);
-                }
-                else
-                {
-                    await shell.GoToAsync(GlobalValues.MainPage);
+                    var methods = await _localAuthPreferencesService.GetAuthMethodAsync();
 
-                    if (methods.HasFlag(LocalAuthMethod.PinCode) || methods.HasFlag(LocalAuthMethod.Pattern))
+                    // Если нет уже выбраных методов входа, значит пользователь открыл приложение в первый раз,
+                    // тогда переходим на страницу аутентификации
+                    if (methods == LocalAuthMethod.None)
                     {
-                        await _navigation.PushModalAsync(new LocalAuthDialog(_localAuthDialogViewModel), true);
+                        await shell.GoToAsync(GlobalValues.AuthPage);
                     }
-                }
-            });
+                    else
+                    {
+                        await shell.GoToAsync(GlobalValues.MainPage);
+
+                        if (methods.HasFlag(LocalAuthMethod.PinCode) || methods.HasFlag(LocalAuthMethod.Pattern))
+                        {
+                            await _navigation.PushModalAsync(new LocalAuthDialog(_localAuthDialogViewModel), true);
+                        }
+                    }
+                });
+            }
+
 
             return new Window(shell);
         }

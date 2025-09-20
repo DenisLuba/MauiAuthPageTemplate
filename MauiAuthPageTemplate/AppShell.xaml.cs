@@ -26,6 +26,7 @@ public partial class AppShell : Shell
     #region ShowSignOutDialog Method
     /// <summary>
     /// Метод для обработки кнопки sign out во flyout.
+    /// </summary>
     private async void ShowSignOutDialog(object sender, EventArgs e)
     {
         var popup = new SignOutPopup(_signOutPopupViewModel, _navigation);
