@@ -5,6 +5,7 @@ using MauiAuthPageTemplate.ViewModels;
 using MauiLocalAuth.ViewModels;
 using MauiShared.Services;
 using Microsoft.Extensions.Logging;
+using Plugin.Maui.KeyListener;
 
 namespace MauiAuthPageTemplate;
 
@@ -22,6 +23,9 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
+
+        if (GlobalValues.USE_PIN_OR_PATTERN)
+            builder.UseKeyListener();
 
 #if DEBUG
         builder.Logging.AddDebug();
