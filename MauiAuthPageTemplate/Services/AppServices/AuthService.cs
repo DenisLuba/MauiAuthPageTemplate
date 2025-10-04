@@ -1,4 +1,5 @@
 ﻿using AuthenticationMaui.Services;
+using AuthenticationMAUI.Models;
 using MauiAuthPageTemplate.Exceptions;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
@@ -19,34 +20,12 @@ public class AuthService(ILoginService loginService)
     /// Убедитесь, что указанный номер телефона действителен и правильно отформатирован.</remarks>
     /// <param name="phoneNumber">Номер телефона, на который будет отправлен проверочный код.</param>
     /// <param name="isTest">Параметр указывает, будет ли выполняться метод в тестовом режиме или на реальном устройстве.</param>
-    /// <returns>Результат операции типа <see cref="Enum"/> <see cref="Result"/></returns>
-    public async Task<Result> RequestVerificationCodeAsync(string phoneNumber, bool isTest)
-    {
-        try
-        {
-            var isRequested = await StartWaitingAsync(async () =>  
-                await loginService.RequestVerificationCodeAsync(phoneNumber, GlobalValues.DefaultTimeout, isTest, Shell.Current));
-
-            if (isRequested) return Result.Success;
-
-            return Result.Failure;
-        }
-        catch (NoInternetException ex)
-        {
-            Trace.WriteLine(ex.Message);
-            return Result.NoInternetConnection;
-        }
-        catch (TimeoutException ex)
-        {
-            Trace.WriteLine(ex.Message);
-            return Result.NoInternetConnection;
-        }
-        catch (Exception ex)
-        {
-            Trace.WriteLine(ex.Message);
-            return Result.Failure;
-        }
-    }
+    /// <returns>Результат операции типа <see cref="AuthResponse"/></returns>
+    public async Task<AuthResponse> RequestVerificationCodeAsync(string phoneNumber, bool isTest) =>
+        await GetAuthResponseAsync(async () =>
+            await loginService.RequestVerificationCodeAsync(phoneNumber, GlobalValues.DefaultTimeout, isTest, Shell.Current) 
+                ? AuthResult.Successful(null, null) 
+                : AuthResult.Failed("Failed to request verification code"));
     #endregion
 
     #region LoginWithVerificationCodeAsync Method
@@ -54,35 +33,10 @@ public class AuthService(ILoginService loginService)
     /// Авторизация с помощью проверочного кода, полученного на номер телефона.
     /// </summary>
     /// <param name="code">Код, полученный пользователем в СМС.</param>
-    /// <returns>Результат операции типа <see cref="Enum"/> <see cref="Result"/></returns>
-    public async Task<Result> LoginWithVerificationCodeAsync(string code)
-    {
-        try
-        {
-            var isLogin = await StartWaitingAsync(async () =>
-                await loginService.LoginWithVerificationCodeAsync(code, GlobalValues.DefaultTimeout));
-
-            if (!isLogin)
-                throw new Exception("Login with the phone failed.");
-
-            return Result.Success;
-        }
-        catch (NoInternetException ex)
-        {
-            Trace.WriteLine(ex.Message);
-            return Result.NoInternetConnection;
-        }
-        catch (TimeoutException ex)
-        {
-            Trace.WriteLine(ex.Message);
-            return Result.NoInternetConnection;
-        }
-        catch (Exception ex)
-        {
-            Trace.WriteLine(ex.Message);
-            return Result.Failure;
-        }
-    }
+    /// <returns>Результат операции типа <see cref="AuthResponse"/></returns>
+    public async Task<AuthResponse> LoginWithVerificationCodeAsync(string code) =>
+        await GetAuthResponseAsync(async () =>
+            await loginService.LoginWithVerificationCodeAsync(code, GlobalValues.DefaultTimeout));
     #endregion
 
     #region LoginWithEmailAsync with parameters Method
@@ -91,70 +45,27 @@ public class AuthService(ILoginService loginService)
     /// </summary>
     /// <param name="loginOrEmail">Логин или электронная почта пользователя.</param>
     /// <param name="password">Пароль (не от почты).</param>
-    /// <returns>Результат операции типа <see cref="Enum"/> <see cref="Result"/></returns>
-    public async Task<Result> LoginWithEmailAsync(string loginOrEmail, string password)
-    {
-        try
-        {
-            var result = await StartWaitingAsync(async () =>
-            {
-                var isLogin = await loginService.LoginWithEmailAsync(loginOrEmail, password, GlobalValues.DefaultTimeout);
-
-                if (!isLogin)
-                    throw new Exception("Login with Email failed.");
-
-                await SetCredentialsAsync(loginOrEmail, password);
-
-                return true;
-            });
-
-            if (result)
-                return Result.Success;
-            else
-                return Result.Failure;
-        }
-        catch (NoInternetException ex)
-        {
-            Trace.WriteLine(ex.Message);
-            return Result.NoInternetConnection;
-        }
-        catch (Exception ex)
-        {
-            Trace.WriteLine(ex.Message);
-            return Result.Failure;
-        }
-    }
+    /// <returns>Результат операции типа <see cref="AuthResponse"/></returns>
+    public async Task<AuthResponse> LoginWithEmailAsync(string loginOrEmail, string password) =>
+        await GetAuthResponseAsync(async () =>
+            await loginService.LoginWithEmailAsync(loginOrEmail, password, GlobalValues.DefaultTimeout));
     #endregion
 
     #region LoginWithEmailAsync without parameters Method
     /// <summary>
     /// Вход с помощью сохраненных логина (или электронной почты) и пароля.
     /// </summary>
-    /// <returns>Результат операции типа <see cref="Enum"/> <see cref="Result"/></returns>
-    public async Task<Result> LoginWithEmailAsync()
+    /// <returns>Результат операции типа <see cref="AuthResponse"/></returns>
+    public async Task<AuthResponse> LoginWithEmailAsync()
     {
-        try
+        return await GetAuthResponseAsync(async () =>
         {
             var (loginOrEmail, password) = await GetCredentialsAsync();
-            if (loginOrEmail is null || password is null) return Result.Failure;
+            if (loginOrEmail is null || password is null)
+                throw new FailureException("Login, Email or Password is null");
 
-            var isLogin = await loginService.LoginWithEmailAsync(loginOrEmail, password, GlobalValues.DefaultTimeout);
-
-            if (!isLogin)
-                throw new Exception("Login with Email failed.");
-
-            return Result.Success;
-        }
-        catch (NoInternetException ex)
-        {
-            Trace.WriteLine(ex.Message);
-            return Result.NoInternetConnection;
-        }
-        catch (Exception ex)
-        {
-            Trace.WriteLine(ex.Message);
-            return Result.Failure;
-        }
+            return await loginService.LoginWithEmailAsync(loginOrEmail, password, GlobalValues.DefaultTimeout);
+        });
     }
     #endregion
 
@@ -162,58 +73,20 @@ public class AuthService(ILoginService loginService)
     /// <summary>
     /// Вход с помощью аккаунта Google.
     /// </summary>
-    /// <returns>Результат операции типа <see cref="Enum"/> <see cref="Result"/></returns>
-    public async Task<Result> LoginWithGoogleAsync()
-    {
-        try
-        {
-            var isLogin = await StartWaitingAsync(async () => await loginService.LoginWithGoogleAsync(GlobalValues.DefaultTimeout));
-
-            if (!isLogin)
-                throw new Exception("Login with Google failed.");
-
-            return Result.Success;
-        }
-        catch (NoInternetException ex)
-        {
-            Trace.WriteLine(ex.Message);
-            return Result.NoInternetConnection;
-        }
-        catch (Exception ex)
-        {
-            Trace.WriteLine(ex.Message);
-            return Result.Failure;
-        }
-    }
+    /// <returns>Результат операции типа <see cref="AuthResponse"/></returns>
+    public async Task<AuthResponse> LoginWithGoogleAsync() =>
+        await GetAuthResponseAsync(async () =>
+            await loginService.LoginWithGoogleAsync(GlobalValues.DefaultTimeout));
     #endregion
 
     #region LoginWithFacebookAsync Method
     /// <summary>
     /// Вход с помощью аккаунта Facebook.
     /// </summary>
-    /// <returns>Результат операции типа <see cref="Enum"/> <see cref="Result"/></returns>
-    public async Task<Result> LoginWithFacebookAsync()
-    {
-        try
-        {
-            var isLogin = await StartWaitingAsync(async() => await loginService.LoginWithFacebookAsync(GlobalValues.DefaultTimeout));
-
-            if (!isLogin)
-                throw new Exception("Login with Google failed.");
-
-            return Result.Success;
-        }
-        catch (NoInternetException ex)
-        {
-            Trace.WriteLine(ex.Message);
-            return Result.NoInternetConnection;
-        }
-        catch (Exception ex)
-        {
-            Trace.WriteLine(ex.Message);
-            return Result.Failure;
-        }
-    }
+    /// <returns>Результат операции типа <see cref="AuthResponse"/></returns>
+    public async Task<AuthResponse> LoginWithFacebookAsync() =>
+        await GetAuthResponseAsync(async () =>
+            await loginService.LoginWithFacebookAsync(GlobalValues.DefaultTimeout));
     #endregion
 
     #region RegisterWithEmailAsync Method
@@ -223,39 +96,10 @@ public class AuthService(ILoginService loginService)
     /// <param name="login">Логин пользователя.</param>
     /// <param name="email">Электронная почта пользователя.</param>
     /// <param name="password">Пароль (не от почты).</param>
-    /// <returns>Результат операции типа <see cref="Enum"/> <see cref="Result"/></returns>
-    public async Task<Result> RegisterWithEmailAsync(string login, string email, string password)
-    {
-        try
-        {
-            var result = await StartWaitingAsync(async () =>
-            {
-                var isRegistered = await loginService.RegisterWithEmailAsync(EditString(login), EditString(email), password, GlobalValues.DefaultTimeout);
-
-                if (!isRegistered)
-                    throw new Exception("Register with Email failed.");
-
-                await SetCredentialsAsync(EditString(email), password);
-
-                return true;
-            });
-
-            if (result)
-                return Result.Success;
-            else
-                return Result.Failure;
-        }
-        catch (NoInternetException ex)
-        {
-            Trace.WriteLine(ex.Message);
-            return Result.NoInternetConnection;
-        }
-        catch (Exception ex)
-        {
-            Trace.WriteLine(ex.Message);
-            return Result.Failure;
-        }
-    }
+    /// <returns>Результат операции типа <see cref="AuthResponse"/></returns>
+    public async Task<AuthResponse> RegisterWithEmailAsync(string login, string email, string password) =>
+        await GetAuthResponseAsync(async () =>
+            await loginService.RegisterWithEmailAsync(EditString(login), EditString(email), password, GlobalValues.DefaultTimeout));
     #endregion
 
     #region SendPasswordResetEmailAsync Method
@@ -263,73 +107,37 @@ public class AuthService(ILoginService loginService)
     /// Сброс пароля пользователя по электронной почте.
     /// </summary>
     /// <param name="email">Электронная почта пользователя, на которую придет новый пароль.</param>
-    /// <returns>Результат операции типа <see cref="Enum"/> <see cref="Result"/></returns>
-    public async Task<Result> SendPasswordResetEmailAsync(string email)
-    {
-        try
+    /// <returns>Результат операции типа <see cref="AuthResponse"/></returns>
+    public async Task<AuthResponse> SendPasswordResetEmailAsync(string email) =>
+        await GetAuthResponseAsync(async () =>
         {
-            var result = await StartWaitingAsync(async () =>
-            {
-                await loginService.SendPasswordResetEmailAsync(EditString(email), GlobalValues.DefaultTimeout);
+            await loginService.SendPasswordResetEmailAsync(EditString(email), GlobalValues.DefaultTimeout);
 
-                await RemoveCredentialsAsync();
+            await RemoveCredentialsAsync();
 
-                return true;
-            });
-
-            if (result)
-                return Result.Success;
-            else
-                return Result.Failure;
-        }
-        catch (NoInternetException ex)
-        {
-            Trace.WriteLine(ex.Message);
-            return Result.NoInternetConnection;
-        }
-        catch (Exception ex)
-        {
-            Trace.WriteLine(ex.Message);
-            return Result.Failure;
-        }
-    }
+            return AuthResult.Successful(null, null);
+        });
     #endregion
 
     #region LogoutAsync Method
     /// <summary>
     /// Выход из учетной записи. Удаление сохраненных записей об учетной записи из памяти устройства.
     /// </summary>
-    /// <returns>Результат операции типа <see cref="Enum"/> <see cref="Result"/></returns>
-    public async Task<Result> LogoutAsync()
-    {
-        try
+    /// <returns>Результат операции типа <see cref="AuthResponse"/></returns>
+    public async Task<AuthResponse> LogoutAsync() =>
+        await GetAuthResponseAsync(async () =>
         {
-            var result = await StartWaitingAsync(async () =>
-            {
-                loginService.Logout();
+            loginService.Logout();
 
-                await RemoveCredentialsAsync();
+            await RemoveCredentialsAsync();
 
-                return true;
-            });
-
-            if (result)
-                return Result.Success;
-            else
-                return Result.Failure;
-        }
-        catch (NoInternetException ex)
-        {
-            Trace.WriteLine(ex.Message);
-            return Result.NoInternetConnection;
-        }
-        catch (Exception ex)
-        {
-            Trace.WriteLine(ex.Message);
-            return Result.Failure;
-        }
-    }
+            return AuthResult.Successful(null, null);
+        });
     #endregion
+
+
+    // Вспомогательные методы для работы с логином (или электронной почтой) и паролем в SecureStorage
+
 
     #region GetCredentialsAsync Method
     /// <summary>
@@ -391,7 +199,7 @@ public class AuthService(ILoginService loginService)
     /// Перед началом выполнения операции задает значение переменной App.IsBusy равным true. 
     /// После окончания операции возвращает переменной App.IsBusy значение false.
     /// </summary>
-    /// <param name="asyncMethod">Асинхронная операция, которая возвращает результат типа bool.</param>
+    /// <param name="asyncMethod">Асинхронная операция, которая возвращает результат типа Т.</param>
     /// <returns>Возвращает результат операции.</returns>
     private static async Task<T> StartWaitingAsync<T>(Func<Task<T>> asyncMethod)
     {
@@ -419,7 +227,54 @@ public class AuthService(ILoginService loginService)
         }
     }
     #endregion
+
+    #region GetAuthResponseAsync Method
+    /// <summary>
+    /// Получает результат операции аутентификации и возвращает соответствующий AuthResponse.
+    /// </summary>
+    /// <param name="asyncMethod">Аснхронная операция, которая возвращает результат типа <see cref="AuthResult"/>?</param>
+    /// <returns>Результат операции типа <see cref="AuthResponse"/></returns>
+    private static async Task<AuthResponse> GetAuthResponseAsync(Func<Task<AuthResult?>> asyncMethod)
+    {
+        try
+        {
+            var authResult = await StartWaitingAsync(async () => await asyncMethod())
+                ?? throw new Exception("AuthResult is null");
+
+            if (!authResult.Success)
+                throw new FailureException(authResult.ErrorMessage ?? "The AuthResult is unsuccessful. ErrorMessage is null");
+
+            return new SuccessResponse(authResult.UserData, authResult.Tokens);
+        }
+        catch (NoInternetException ex)
+        {
+            Trace.WriteLine(ex.Message);
+            return new NoInternetResponse();
+        }
+        catch (TimeoutException ex)
+        {
+            Trace.WriteLine(ex.Message);
+            return new NoInternetResponse();
+        }
+        catch (FailureException ex)
+        {
+            Trace.WriteLine(ex.Message);
+            return new FailureResponse(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            Trace.WriteLine(ex.Message);
+            return new UnknownErrorResponse();
+        }
+    }
 }
+#endregion
+
+
+// Классы для возврата результата операции аутентификации
+
+#region AuthResponse
+public abstract record AuthResponse(Result Result);
 
 public enum Result
 {
@@ -428,3 +283,16 @@ public enum Result
     NoInternetConnection,
     UnknownError
 }
+
+public record SuccessResponse(UserAuthData? UserAuthData, AuthTokens? AuthTokens)
+    : AuthResponse(Result.Success);
+
+public record FailureResponse(string ErrorMessage)
+    : AuthResponse(Result.Failure);
+
+public record NoInternetResponse()
+    : AuthResponse(Result.NoInternetConnection);
+
+public record UnknownErrorResponse()
+    : AuthResponse(Result.UnknownError);
+#endregion
