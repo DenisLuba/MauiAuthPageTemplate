@@ -12,6 +12,10 @@ public class AuthService(ILoginService loginService)
     private const string LoginOrEmailKey = "LOGIN_OR_EMAIL_KEY";
     #endregion
 
+
+    // Методы для аутентификации пользователя
+
+
     #region RequestVerificationCodeAsync Method
     /// <summary>
     /// Отправляет запрос на генерацию и доставку проверочного кода на указанный номер телефона.
@@ -272,6 +276,7 @@ public class AuthService(ILoginService loginService)
 
 
 // Классы для возврата результата операции аутентификации
+
 
 #region AuthResponse
 public abstract record AuthResponse(Result Result);

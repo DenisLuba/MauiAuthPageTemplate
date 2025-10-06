@@ -39,12 +39,12 @@ public partial class LoginWithPhoneViewModel(AuthService authService)  : Observa
         try
         {
             var result = await authService.RequestVerificationCodeAsync(PhoneNumber, GlobalValues.IS_TEST);
-            if (result == Result.Success)
+            if (result.Result == Result.Success)
             {
                 CleanEntryEvent?.Invoke(this, true);
                 IsVerificationCodeDialog = true; // Switch to code entry mode
             }
-            else if (result == Result.NoInternetConnection)
+            else if (result.Result == Result.NoInternetConnection)
             {
                 await Shell.Current.DisplayAlert(ResourcesLoginWithPhoneViewModel.error, ResourcesLoginWithPhoneViewModel.no_internet_connection, "OK");
             }
@@ -74,13 +74,13 @@ public partial class LoginWithPhoneViewModel(AuthService authService)  : Observa
         try
         {
             var result = await authService.LoginWithVerificationCodeAsync(Code);
-            if (result == Result.Success)
+            if (result.Result == Result.Success)
             {
                 CleanEntryEvent?.Invoke(this, true);
                 CloseDialogEvent?.Invoke(this, true);
             }
 
-            AuthPageViewModel.OnAuthenticationEvent(result, ResourcesLoginWithPhoneViewModel.error_verification_code);
+            AuthPageViewModel.OnAuthenticationEvent(result.Result, ResourcesLoginWithPhoneViewModel.error_verification_code);
             IsVerificationCodeDialog = false;
         }
         catch (Exception)

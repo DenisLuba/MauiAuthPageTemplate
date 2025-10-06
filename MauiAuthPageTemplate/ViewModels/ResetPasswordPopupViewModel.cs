@@ -22,11 +22,11 @@ public partial class ResetPasswordPopupViewModel(AuthService authService) : Obse
     public async Task ResetPasswordAsync()
     {
         var isDroped = await authService.SendPasswordResetEmailAsync(Email);
-        if (isDroped is Result.Success)
+        if (isDroped.Result is Result.Success)
             EmailConfirmed?.Invoke(this, EventArgs.Empty);
-        else if (isDroped is Result.Failure)
+        else if (isDroped.Result is Result.Failure)
             await Shell.Current.DisplayAlert(ResourcesResetPasswordPopupViewModel.error, ResourcesResetPasswordPopupViewModel.password_reset_error, "OK");
-        else if (isDroped is Result.NoInternetConnection)
+        else if (isDroped.Result is Result.NoInternetConnection)
             await Shell.Current.DisplayAlert(ResourcesResetPasswordPopupViewModel.error, ResourcesResetPasswordPopupViewModel.no_internet_connection, "OK");
     }
     #endregion

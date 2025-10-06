@@ -48,10 +48,10 @@ public partial class SignUpPopupViewModel(AuthService authService) : ObservableO
 
         var result = await authService.RegisterWithEmailAsync(Username, Email, Password);
 
-        if (result is Result.Success)
+        if (result.Result is Result.Success)
             RequestClose?.Invoke(this, true);
 
-        AuthPageViewModel.OnAuthenticationEvent(result, ResourceSignUpPageViewModel.registration_error_by_email);
+        AuthPageViewModel.OnAuthenticationEvent(result.Result, ResourceSignUpPageViewModel.registration_error_by_email);
     }
     #endregion
 

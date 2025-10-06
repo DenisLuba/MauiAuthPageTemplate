@@ -21,9 +21,9 @@ public partial class SignOutPopupViewModel(AuthService authService, LocalAuthPre
             var result = await authService.LogoutAsync();
             preferencesService.ClearAuthMethod();
 
-            if (result.Equals(Result.NoInternetConnection))
+            if (result.Result.Equals(Result.NoInternetConnection))
                 await Shell.Current.DisplayAlert(ResourcesSignOutPopupViewModel.error, ResourcesSignOutPopupViewModel.no_internet_connection, "OK");
-            else if (result.Equals(Result.Failure) || result.Equals(Result.UnknownError))
+            else if (result.Result.Equals(Result.Failure) || result.Result.Equals(Result.UnknownError))
                 await Shell.Current.DisplayAlert(ResourcesSignOutPopupViewModel.error, ResourcesSignOutPopupViewModel.error_while_signing_out, "OK");
         }
         finally

@@ -54,8 +54,8 @@ public partial class AuthPageViewModel : ObservableObject
     {
         if (!string.IsNullOrWhiteSpace(Login) && !string.IsNullOrWhiteSpace(Password))
         {
-            var isAuthorized = await _authService.LoginWithEmailAsync(Login, Password);
-            OnAuthenticationEvent(isAuthorized, ResourcesAuthPageViewModel.invalid_login_or_password);
+            var authResponse = await _authService.LoginWithEmailAsync(Login, Password);
+            OnAuthenticationEvent(authResponse.Result, ResourcesAuthPageViewModel.invalid_login_or_password);
         }
         else
         {
@@ -70,8 +70,8 @@ public partial class AuthPageViewModel : ObservableObject
     {
         try
         {
-            var isAuthorized = await _authService.LoginWithGoogleAsync();
-            OnAuthenticationEvent(isAuthorized, ResourcesAuthPageViewModel.google_login_error);
+            var authResponse = await _authService.LoginWithGoogleAsync();
+            OnAuthenticationEvent(authResponse.Result, ResourcesAuthPageViewModel.google_login_error);
         }
         catch (Exception ex)
         {
@@ -86,8 +86,8 @@ public partial class AuthPageViewModel : ObservableObject
     {
         try
         {
-            var isAuthorized = await _authService.LoginWithFacebookAsync();
-            OnAuthenticationEvent(isAuthorized, ResourcesAuthPageViewModel.facebook_login_error);
+            var authResponse = await _authService.LoginWithFacebookAsync();
+            OnAuthenticationEvent(authResponse.Result, ResourcesAuthPageViewModel.facebook_login_error);
         }
         catch (Exception ex)
         {
