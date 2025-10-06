@@ -34,6 +34,9 @@ internal static class GlobalValues
     internal const string PinCodePage = "//PinCodePage";
 
     internal const long DefaultTimeout = 100000; // 10 seconds
+
+    internal const string REFRESH_TOKEN = "REFRESH_TOKEN";
+    internal const string ID_TOKEN = "ID_TOKEN";
 }
 
 // Примечание: значения CALLBACK_SCHEME, API_KEY, AUTH_DOMAIN, GOOGLE_CLIENT_ID, GOOGLE_REDIRECT_URI, FACEBOOK_APP_ID, FACEBOOK_APP_SECRET должны быть заменены на ваши собственные значения из Firebase Console и Google Cloud Console.

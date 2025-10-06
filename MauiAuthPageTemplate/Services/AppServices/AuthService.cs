@@ -248,7 +248,18 @@ public class AuthService(ILoginService loginService)
             if (!authResult.Success)
                 throw new FailureException(authResult.ErrorMessage ?? "The AuthResult is unsuccessful. ErrorMessage is null");
 
-            return new SuccessResponse(authResult.UserData, authResult.Tokens);
+            // Сохраняем refreshToken и idToken в SecureStorage для дальнейшего использования,
+            // например, для авторизации через ПИН-КОД, графический узор, FaceID или отпечаток пальца
+            if (authResult.UserData is not null && authResult.Tokens is not null)
+            {
+                SecureStorage.Remove(GlobalValues.REFRESH_TOKEN);
+                SecureStorage.Remove(GlobalValues.ID_TOKEN);
+
+                await SecureStorage.SetAsync(GlobalValues.REFRESH_TOKEN, authResult.Tokens.RefreshToken);
+                await SecureStorage.SetAsync(GlobalValues.ID_TOKEN, authResult.Tokens.IdToken);
+            }
+
+                return new SuccessResponse(authResult.UserData, authResult.Tokens);
         }
         catch (NoInternetException ex)
         {
