@@ -5,12 +5,14 @@ using MauiLocalAuth.Dialogs;
 using MauiLocalAuth.ViewModels;
 using MauiShared.Services;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.Versioning;
 
 namespace MauiAuthPageTemplate
 {
     public partial class App : Application, INotifyPropertyChanged
     {
+        private readonly AuthService _authService;
         private readonly SignOutPopupViewModel _signOutPopupViewModel;
         private readonly LocalAuthDialogViewModel _localAuthDialogViewModel;
         private readonly INavigationService _navigation;
@@ -38,6 +40,8 @@ namespace MauiAuthPageTemplate
             LocalAuthPreferencesService preferencesService)
         {
             InitializeComponent();
+
+            _authService = authService;
             _signOutPopupViewModel = signOutPopupViewModel;
             _localAuthDialogViewModel = localAuthDialogViewModel;
             _navigation = navigation;
@@ -76,6 +80,37 @@ namespace MauiAuthPageTemplate
 
                         if (methods.HasFlag(LocalAuthMethod.PinCode) || methods.HasFlag(LocalAuthMethod.Pattern))
                         {
+                            var localAuthDialog = new LocalAuthDialog(_localAuthDialogViewModel);
+                            localAuthDialog.ViewModel.EntranceCompletedEvent += (_, args) =>
+                            {
+                                if (args is bool result && result)
+                                {
+                                    // Если пользователь смог пройти аутентификацию по ПИН-КОДУ или ПАТТЕРНУ,
+                                    // обновляем токены
+                                    var refreshToken = SecureStorage.GetAsync(GlobalValues.REFRESH_TOKEN).Result;
+                                    if (string.IsNullOrEmpty(refreshToken))
+                                    {
+                                        MainThread.BeginInvokeOnMainThread(async () =>
+                                        {
+                                            await _authService.LogoutAsync();
+                                            await shell.GoToAsync(GlobalValues.AuthPage);
+                                        });
+                                        return;
+                                    }
+                                    else
+                                    {
+                                        MainThread.BeginInvokeOnMainThread(async () =>
+                                        {
+                                            var authResponse = await _authService.LoginWithRefreshTokenAsync(refreshToken);
+                                            //if (authResponse is SuccessResponse response)
+                                            //{
+                                            //    Trace.WriteLine($"[App] LoginWithRefreshTokenAsync - Refresh Token: {response?.AuthTokens?.RefreshToken}");
+                                            //}
+                                        });
+                                    }
+                                    
+                                }
+                            };
                             await _navigation.PushModalAsync(new LocalAuthDialog(_localAuthDialogViewModel), true);
                         }
                     }
