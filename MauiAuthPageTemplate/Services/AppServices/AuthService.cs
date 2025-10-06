@@ -139,6 +139,17 @@ public class AuthService(ILoginService loginService)
         });
     #endregion
 
+    #region LoginWithRefreshTokenAsync Method
+    /// <summary>
+    /// Вход с помощью сохраненного refreshToken.
+    /// </summary>
+    /// <param name="refreshToken">Refresh токен</param>
+    /// <returns>Результат операции типа <see cref="AuthResponse"/></returns>
+    public async Task<AuthResponse> LoginWithRefreshTokenAsync(string refreshToken) =>
+        await GetAuthResponseAsync(async () =>
+            await loginService.LoginWithRefreshTokenAsync(refreshToken, GlobalValues.DefaultTimeout)); 
+    #endregion
+
 
     // Вспомогательные методы для работы с логином (или электронной почтой) и паролем в SecureStorage
 
